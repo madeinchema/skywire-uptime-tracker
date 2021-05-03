@@ -1,5 +1,6 @@
 import { useColorMode } from '@chakra-ui/color-mode';
 import { Box, Flex, HStack, Text, VStack } from '@chakra-ui/layout';
+import { Tooltip } from '@chakra-ui/tooltip';
 import React from 'react';
 import { VisorUptime } from '../interfaces';
 
@@ -31,10 +32,12 @@ const VisorCard = ({ visor }: Props) => {
           <Text>VisorLabel</Text>
         </HStack>
         <HStack spacing={5}>
-          <Text>
-            {(visor.uptime / 86400).toFixed(2)}d{' / '}
-            {(visor.downtime / 86400).toFixed(2)}d
-          </Text>
+          <Tooltip hasArrow label="Uptime / Downtime">
+            <Text>
+              {(visor.uptime / 86400).toFixed(2)}d{' / '}
+              {(visor.downtime / 86400).toFixed(2)}d
+            </Text>
+          </Tooltip>
           <Text>{visor.percentage.toFixed(2)}%</Text>
         </HStack>
       </Flex>
