@@ -2,7 +2,7 @@ import { Input } from '@chakra-ui/input';
 import { Dispatch, SetStateAction } from 'react';
 
 type Props = {
-  value: string;
+  value: string | undefined;
   setValue: Dispatch<SetStateAction<string | undefined>>;
 };
 
