@@ -1,11 +1,14 @@
+import { ChakraProvider } from '@chakra-ui/react';
 import { Provider } from 'react-redux';
 import store from '../state/store';
 
 function MyApp({ Component, pageProps }) {
   return (
-    <Provider store={store}>
-      <Component {...pageProps} />
-    </Provider>
+    <ChakraProvider>
+      <Provider store={store}>
+        <Component {...pageProps} />
+      </Provider>
+    </ChakraProvider>
   );
 }
 
