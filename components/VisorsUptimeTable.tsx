@@ -1,20 +1,31 @@
-import { Table, Thead, Tbody, Tr, Th, Td, Box } from '@chakra-ui/react';
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  Box,
+  Container,
+} from '@chakra-ui/react';
 import { VisorUptime } from '../interfaces';
 
 type Props = {
   dataSource: VisorUptime[] | undefined;
 };
 
-const VisorsUptimeTable = ({ dataSource }: Props) => {
-  return (
-    <Box overflowX="auto" maxWidth="100%">
-      <Table size="sm" variant="striped">
+const VisorsUptimeTable = ({ dataSource }: Props) => (
+  <Container px={2} maxW="container.lg">
+    <Box overflowX="auto" width="100%">
+      <Table size="sm" variant="custom">
         <Thead>
-          <Th width="80px">Online</Th>
-          <Th>Key</Th>
-          <Th isNumeric>Percentage</Th>
-          <Th isNumeric>Uptime</Th>
-          <Th isNumeric>Downtime</Th>
+          <Tr>
+            <Th width="80px">Online</Th>
+            <Th>Key</Th>
+            <Th isNumeric>Percentage</Th>
+            <Th isNumeric>Uptime</Th>
+            <Th isNumeric>Downtime</Th>
+          </Tr>
         </Thead>
         <Tbody>
           {dataSource &&
@@ -37,7 +48,7 @@ const VisorsUptimeTable = ({ dataSource }: Props) => {
         </Tbody>
       </Table>
     </Box>
-  );
-};
+  </Container>
+);
 
 export default VisorsUptimeTable;
