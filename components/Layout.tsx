@@ -9,17 +9,16 @@ type Props = {
 };
 
 const Layout = ({ children, title = 'Skywire Uptime Tracker' }: Props) => (
-  <div>
+  <Flex direction="column">
     <Head>
       <title>{title}</title>
       <meta charSet="utf-8" />
-      <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     </Head>
     <Header />
     <Flex direction="column" py={[3, 5]}>
       {children}
     </Flex>
-  </div>
+  </Flex>
 );
 
 export default Layout;
