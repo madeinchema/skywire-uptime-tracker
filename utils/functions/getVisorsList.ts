@@ -2,7 +2,7 @@ import sampleVisorsUptimeData from '../sample-visors-uptime-data';
 
 const getVisorsList = async (useFakeData: boolean = false) => {
   if (useFakeData) {
-    return new Promise((res, rej) => {
+    return new Promise((res) => {
       res(sampleVisorsUptimeData);
     });
   }

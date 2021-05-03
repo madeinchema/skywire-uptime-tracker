@@ -1,4 +1,4 @@
-export const sampleVisorsData = [
+export default [
   {
     pk: '020011587bf42a45b15f40d6783f5e5320a69a97a7298382103b754f2e3b6b63e9',
   },

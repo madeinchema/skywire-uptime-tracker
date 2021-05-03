@@ -7,7 +7,6 @@ export const visorsUptimeSlice = createSlice({
   },
   reducers: {
     saveVisorsUptimeData: (state, action) => {
-      console.log(action.payload);
       state.visors = action.payload;
     },
   },

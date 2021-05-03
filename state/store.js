@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import visorsUptimeReducer from '../state/slices/visorsUptimeSlice';
+import visorsUptimeReducer from './slices/visorsUptimeSlice';
 
 export default configureStore({
   reducer: {
