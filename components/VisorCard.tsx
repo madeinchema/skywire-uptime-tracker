@@ -3,8 +3,12 @@ import { useClipboard } from '@chakra-ui/hooks';
 import { Box, Flex, HStack, Text, VStack } from '@chakra-ui/layout';
 import { useToast } from '@chakra-ui/toast';
 import { Tooltip } from '@chakra-ui/tooltip';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { VisorUptime } from '../interfaces';
+import {
+  formatPercentage,
+  formatSecsToDays,
+} from '../utils/functions/dataFormatter';
 
 type Props = {
   visor: VisorUptime;
@@ -23,6 +27,15 @@ const VisorCard = ({ visor }: Props) => {
       duration: 3000,
     });
   };
+
+  const formattedVisorData = useMemo(
+    () => ({
+      uptime: formatSecsToDays(visor.uptime),
+      downtime: formatSecsToDays(visor.downtime),
+      percentage: formatPercentage(visor.percentage),
+    }),
+    []
+  );
 
   return (
     <VStack
@@ -47,11 +60,12 @@ const VisorCard = ({ visor }: Props) => {
         <HStack spacing={5}>
           <Tooltip hasArrow label="Uptime / Downtime">
             <Text>
-              {(visor.uptime / 86400).toFixed(2)}d{' / '}
-              {(visor.downtime / 86400).toFixed(2)}d
+              {formattedVisorData.uptime}
+              {' / '}
+              {formattedVisorData.downtime}
             </Text>
           </Tooltip>
-          <Text>{visor.percentage.toFixed(2)}%</Text>
+          <Text>{formattedVisorData.percentage}</Text>
         </HStack>
       </Flex>
       <Flex wordBreak="break-all" overflowWrap="break-word" overflow="hidden">
