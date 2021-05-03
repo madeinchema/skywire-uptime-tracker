@@ -7,11 +7,18 @@ import { mode } from '@chakra-ui/theme-tools';
 const Table = {
   variants: {
     custom: (props) => ({
+      thead: {
+        tr: {
+          th: {
+            background: mode('gray.100', 'gray.900')(props),
+          },
+        },
+      },
       tr: {
         _odd: {
-          background: mode('gray.100', 'gray.800')(props),
+          background: mode('gray.200', 'gray.800')(props),
         },
-        _even: { background: mode('gray.200', 'gray.900')(props) },
+        _even: { background: mode('gray.100', 'gray.900')(props) },
       },
     }),
   },
