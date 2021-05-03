@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { saveVisorsUptimeData } from '../state/slices/visorsUptimeSlice';
 import {
@@ -11,8 +11,11 @@ import {
   Td,
   TableCaption,
   Box,
+  VStack,
 } from '@chakra-ui/react';
 import Layout from '../components/Layout';
+import sampleSkyminerVisorsData from '../utils/sample-visors-uptime-data.js';
+import { getVisorsList } from '../utils/functions/getVisorsList';
 
 type Props = {
   items: Visor[];
@@ -27,6 +30,7 @@ type VisorUptime = Visor & {
 };
 
 const IndexPage = () => {
+  const [inputValue, setInputValue] = useState<string | undefined>(undefined);
   // const [data, setData] = useState<VisorUptime[] | undefined>(undefined);
   const visorsUptimeList = useSelector((state) => state.visorsUptime.visors);
   const dispatch = useDispatch();
@@ -53,56 +57,53 @@ const IndexPage = () => {
     // getVisorsUptimeData().then((data) => console.log({ data }));
     if (visorsUptimeList.length < 1) {
       console.log('here');
-      // dispatch(saveVisorsUptimeData({ payload: '123' }));
-      fetch('http://localhost:8080/visors', {
-        headers: { 'Content-Type': 'application/json' },
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log({ data });
-          dispatch(saveVisorsUptimeData(data));
-        });
+      // dispatch(saveVisorsUptimeData(sampleSkyminerVisorsData));
+      getVisorsList().then((data) => {
+        console.log({ data });
+        dispatch(saveVisorsUptimeData(data));
+      });
     }
   }, []);
 
   return (
     <Layout title="Users List | Next.js + TypeScript Example">
-      <h1>Visors List</h1>
-      Visor: {myVisor}
-      <br />
-      <br />
-      <button onClick={() => isVisorListed(myVisor)}>Is visor listed?</button>
-      <button onClick={() => isVisorOnline(myVisor)}>Is visor Online?</button>
-      <br />
-      <br />
-      <Table size="sm" variant="striped">
-        <Thead>
-          <Th width="80px">Online</Th>
-          <Th>Key</Th>
-          <Th isNumeric>Percentage</Th>
-          <Th isNumeric>Uptime</Th>
-          <Th isNumeric>Downtime</Th>
-        </Thead>
-        <Tbody>
-          {visorsUptimeList &&
-            visorsUptimeList.map((visor) => (
-              <Tr>
-                <Td>
-                  <Box
-                    width={3}
-                    height={3}
-                    borderRadius="100%"
-                    bgColor={visor.online ? 'green' : 'red'}
-                  />
-                </Td>
-                <Td>{visor.key}</Td>
-                <Td isNumeric>{visor.percentage}</Td>
-                <Td isNumeric>{visor.uptime}</Td>
-                <Td isNumeric>{visor.downtime}</Td>
-              </Tr>
-            ))}
-        </Tbody>
-      </Table>
+      <VStack spacing={6}>
+        <h1>Visors List</h1>
+        Visor: {myVisor}
+        <button onClick={() => isVisorListed(myVisor)}>Is visor listed?</button>
+        <button onClick={() => isVisorOnline(myVisor)}>Is visor Online?</button>
+        <Table size="sm" variant="striped">
+          <Thead>
+            <Th width="80px">Online</Th>
+            <Th>Key</Th>
+            <Th isNumeric>Percentage</Th>
+            <Th isNumeric>Uptime</Th>
+            <Th isNumeric>Downtime</Th>
+          </Thead>
+          <Tbody>
+            {
+              /* visorsUptimeList &&
+                visorsUptimeList.map */ visorsUptimeList &&
+                visorsUptimeList.map((visor) => (
+                  <Tr key={visor.key}>
+                    <Td>
+                      <Box
+                        width={3}
+                        height={3}
+                        borderRadius="100%"
+                        bgColor={visor.online ? 'green' : 'red'}
+                      />
+                    </Td>
+                    <Td>{visor.key}</Td>
+                    <Td isNumeric>{visor.percentage}</Td>
+                    <Td isNumeric>{visor.uptime}</Td>
+                    <Td isNumeric>{visor.downtime}</Td>
+                  </Tr>
+                ))
+            }
+          </Tbody>
+        </Table>
+      </VStack>
     </Layout>
   );
 };
