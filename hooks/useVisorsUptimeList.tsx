@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { RootStateOrAny, useDispatch, useSelector } from 'react-redux';
 import { VisorUptime } from '../interfaces';
 import { saveVisorsUptimeData } from '../state/slices/visorsUptimeSlice';
 import { getVisorsList } from '../utils/functions/getVisorsList';
@@ -9,7 +9,7 @@ const useVisorsUptimeList = () => {
     VisorUptime[] | undefined
   >(undefined);
   const visorsUptimeListFromStore = useSelector(
-    (state) => state.visorsUptime.visors
+    (state: RootStateOrAny) => state.visorsUptime.visors
   );
   const dispatch = useDispatch();
   const USE_FAKE_DATA = true;
