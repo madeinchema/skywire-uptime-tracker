@@ -1,7 +1,11 @@
-import { Flex, Heading, Link } from '@chakra-ui/layout';
+import { Button } from '@chakra-ui/button';
+import { useColorMode } from '@chakra-ui/color-mode';
+import { Flex, Heading, HStack, Link } from '@chakra-ui/layout';
 import React from 'react';
 
 const Header = () => {
+  const { toggleColorMode } = useColorMode();
+
   return (
     <Flex
       justify="space-between"
@@ -10,16 +14,27 @@ const Header = () => {
       px={[3, 5]}
       backgroundColor={'blue.500'}
     >
-      <Heading as="h1" size="md">
+      <Heading as="h1" size="md" color="white">
         Skywire Uptime Tracker
       </Heading>
-      <Link
-        href="https://github.com/madeinchema/skywire-uptime-tracker"
-        target="_blank"
-        rel="noreferrer"
-      >
-        Github repo
-      </Link>
+      <HStack spacing={4}>
+        <Button
+          size="sm"
+          onClick={toggleColorMode}
+          bgColor="blue.400"
+          color="white"
+        >
+          Toggle theme
+        </Button>
+        <Link
+          href="https://github.com/madeinchema/skywire-uptime-tracker"
+          target="_blank"
+          rel="noreferrer"
+          color="white"
+        >
+          Github repo
+        </Link>
+      </HStack>
     </Flex>
   );
 };
