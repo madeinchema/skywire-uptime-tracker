@@ -40,4 +40,4 @@ const theme = extendTheme({
   },
 });
 
-export { theme as customTheme };
+export default theme
