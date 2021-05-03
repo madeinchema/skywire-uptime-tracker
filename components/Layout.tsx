@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
 import Head from 'next/head';
 import Header from './Header';
+import { Flex } from '@chakra-ui/layout';
 
 type Props = {
   children?: ReactNode;
@@ -15,7 +16,9 @@ const Layout = ({ children, title = 'Skywire Uptime Tracker' }: Props) => (
       <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     </Head>
     <Header />
-    {children}
+    <Flex direction="column" py={[3, 5]}>
+      {children}
+    </Flex>
   </div>
 );
 
