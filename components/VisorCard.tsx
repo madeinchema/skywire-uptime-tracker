@@ -1,5 +1,7 @@
 import { useColorMode } from '@chakra-ui/color-mode';
+import { useClipboard } from '@chakra-ui/hooks';
 import { Box, Flex, HStack, Text, VStack } from '@chakra-ui/layout';
+import { useToast } from '@chakra-ui/toast';
 import { Tooltip } from '@chakra-ui/tooltip';
 import React from 'react';
 import { VisorUptime } from '../interfaces';
@@ -9,7 +11,18 @@ type Props = {
 };
 
 const VisorCard = ({ visor }: Props) => {
+  const toast = useToast();
+  const { onCopy } = useClipboard(visor.key);
   const { colorMode } = useColorMode();
+
+  const handleCopyVisorKey = () => {
+    onCopy();
+    toast({
+      title: 'The public key has been copied.',
+      status: 'success',
+      duration: 3000,
+    });
+  };
 
   return (
     <VStack
@@ -29,7 +42,7 @@ const VisorCard = ({ visor }: Props) => {
             borderRadius="100%"
             bgColor={visor.online ? 'green' : 'red'}
           />
-          <Text>VisorLabel</Text>
+          <Text fontWeight="700">VisorLabel</Text>
         </HStack>
         <HStack spacing={5}>
           <Tooltip hasArrow label="Uptime / Downtime">
@@ -42,7 +55,11 @@ const VisorCard = ({ visor }: Props) => {
         </HStack>
       </Flex>
       <Flex wordBreak="break-all" overflowWrap="break-word" overflow="hidden">
-        <Text fontWeight="500" wordBreak="break-all">
+        <Text
+          fontWeight="500"
+          wordBreak="break-all"
+          onClick={handleCopyVisorKey}
+        >
           {visor.key}
         </Text>
       </Flex>
