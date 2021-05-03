@@ -18,7 +18,6 @@ const VisorCard = ({ visor }: Props) => {
       py={3}
       px={4}
       borderRadius={5}
-      width="100%"
       bgColor={colorMode === 'light' ? 'white' : 'gray.900'}
     >
       <Flex justify="space-between" align="center" width="100%">
@@ -39,12 +38,7 @@ const VisorCard = ({ visor }: Props) => {
           <Text>{visor.percentage.toFixed(2)}%</Text>
         </HStack>
       </Flex>
-      <Flex
-        wordBreak="break-all"
-        overflowWrap="break-word"
-        overflow="hidden"
-        width="100%"
-      >
+      <Flex wordBreak="break-all" overflowWrap="break-word" overflow="hidden">
         <Text fontWeight="500" wordBreak="break-all">
           {visor.key}
         </Text>

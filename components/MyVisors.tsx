@@ -9,7 +9,15 @@ type Props = {
 
 const MyVisors = ({ visors }: Props) => {
   return (
-    <Grid>
+    <Grid
+      templateColumns={{
+        base: '1fr',
+        md: '1fr 1fr',
+        xl: 'repeat(3, 1fr)',
+      }}
+      gap={5}
+      px={2}
+    >
       {visors &&
         visors.map((visor) => <VisorCard key={visor.key} visor={visor} />)}
     </Grid>
