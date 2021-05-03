@@ -1,6 +1,6 @@
 import { Input } from '@chakra-ui/input';
 import { Container, Flex } from '@chakra-ui/layout';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { useState } from 'react';
 import useVisorsUptimeList from '../hooks/useVisorsUptimeList';
 
 const AddVisor = () => {
