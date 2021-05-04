@@ -25,9 +25,18 @@ const Table = {
 };
 
 /**
+ * Config
+ */
+const config = {
+  initialColorMode: 'dark',
+  useSystemColorMode: false,
+}
+
+/**
  * Custom theme
  */
 const theme = extendTheme({
+  config,
   components: {
     Table,
   },
