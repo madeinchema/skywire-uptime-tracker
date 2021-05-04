@@ -3,7 +3,7 @@ export type VisorLabel = string;
 
 export type MyVisor = {
   key: VisorKey;
-  label: VisorLabel;
+  label?: VisorLabel;
 };
 
 export type VisorUptime = {
