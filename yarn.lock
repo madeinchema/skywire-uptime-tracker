@@ -3222,7 +3222,7 @@
   "resolved" "https://registry.npmjs.org/natural-compare/-/natural-compare-1.4.0.tgz"
   "version" "1.4.0"
 
-"next@latest":
+"next@^10.2.0":
   "integrity" "sha512-PKDKCSF7s82xudu3kQhOEaokxggpbLEWouEUtzP6OqV0YqKYHF+Ff+BFLycEem8ixtTM2M6ElN0VRJcskJfxPQ=="
   "resolved" "https://registry.npmjs.org/next/-/next-10.2.0.tgz"
   "version" "10.2.0"
