@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { MyVisor } from '../../interfaces';
 
 type MyVisorsState = {
-  myVisors: MyVisor[];
+  visors: MyVisor[];
 };
 
 interface AddNewVisorAction {
@@ -11,19 +11,22 @@ interface AddNewVisorAction {
 }
 
 const initialState: MyVisorsState | [] = {
-  myVisors: [],
+  visors: [],
 };
 
 export const myVisorsSlice = createSlice({
   name: 'myVisors',
   initialState,
   reducers: {
+    saveMyVisorsData: (state, action) => {
+      state.visors = action.payload;
+    },
     addNewVisor: (state, action: AddNewVisorAction) => {
-      state.myVisors = [...state.myVisors, action.payload];
+      state.visors = [...state.visors, action.payload];
     },
   },
 });
 
-export const { addNewVisor } = myVisorsSlice.actions;
+export const { addNewVisor, saveMyVisorsData } = myVisorsSlice.actions;
 
 export default myVisorsSlice.reducer;
