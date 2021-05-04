@@ -1,25 +1,27 @@
 import { useColorMode } from '@chakra-ui/color-mode';
+import { Editable, EditableInput, EditablePreview } from '@chakra-ui/editable';
 import { useClipboard } from '@chakra-ui/hooks';
 import { Box, Flex, HStack, Text, VStack } from '@chakra-ui/layout';
 import { useToast } from '@chakra-ui/toast';
 import { Tooltip } from '@chakra-ui/tooltip';
 import React, { useMemo } from 'react';
-import { VisorUptime } from '../interfaces';
+import { MyVisorUptime } from '../interfaces';
 import {
   formatPercentage,
   formatSecsToDays,
 } from '../utils/functions/dataFormatter';
 
-type Props = {
-  visor: VisorUptime;
+type VisorCardProps = {
+  visor: MyVisorUptime;
+  onLabelSubmit?: (value: string) => void;
 };
 
-const VisorCard = ({ visor }: Props) => {
+const VisorCard = ({ visor, onLabelSubmit }: VisorCardProps): JSX.Element => {
   const toast = useToast();
   const { onCopy } = useClipboard(visor.key);
   const { colorMode } = useColorMode();
 
-  const handleCopyVisorKey = () => {
+  const handleCopyVisorKey = (): void => {
     onCopy();
     toast({
       title: 'The public key has been copied.',
@@ -34,7 +36,7 @@ const VisorCard = ({ visor }: Props) => {
       downtime: formatSecsToDays(visor.downtime),
       percentage: formatPercentage(visor.percentage),
     }),
-    []
+    [visor.downtime, visor.percentage, visor.uptime]
   );
 
   return (
@@ -55,7 +57,15 @@ const VisorCard = ({ visor }: Props) => {
             borderRadius="100%"
             bgColor={visor.online ? 'green' : 'red'}
           />
-          <Text fontWeight="700">VisorLabel</Text>
+
+          <Editable
+            fontWeight="700"
+            defaultValue={visor.label ? visor.label : 'Visor'}
+            onChange={onLabelSubmit && onLabelSubmit}
+          >
+            <EditablePreview />
+            <EditableInput />
+          </Editable>
         </HStack>
         <HStack spacing={5}>
           <Tooltip hasArrow label="Uptime / Downtime">
