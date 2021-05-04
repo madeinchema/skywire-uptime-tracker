@@ -4,9 +4,13 @@ import useVisorsUptimeList from '../hooks/useVisorsUptimeList';
 import AddVisor from '../components/AddVisor';
 import VisorsUptimeTable from '../components/VisorsUptimeTable';
 import MyVisors from '../components/MyVisors';
+import useMyVisorsList from '../hooks/useMyVisorsList';
 
 const IndexPage = (): JSX.Element => {
   const { visorsUptimeList } = useVisorsUptimeList();
+  const { myVisorsList } = useMyVisorsList();
+
+  console.log({index: myVisorsList})
 
   return (
     <Layout>
@@ -21,7 +25,7 @@ const IndexPage = (): JSX.Element => {
           <Heading as="h1" size="lg">
             Your Visors
           </Heading>
-          <MyVisors visors={visorsUptimeList} />
+          <MyVisors visors={myVisorsList} />
         </VStack>
         <Heading as="h1" size="lg">
           Visors List
