@@ -3,28 +3,28 @@ import { Input } from '@chakra-ui/input';
 import { Container, Flex, HStack, Text, VStack } from '@chakra-ui/layout';
 import { useState } from 'react';
 import useVisorsUptimeList from '../hooks/useVisorsUptimeList';
-import { VisorUptime } from '../interfaces';
+import { MyVisor, VisorUptime } from '../interfaces';
 import VisorCard from './VisorCard';
-
-interface AddVisorInput {
-  label: string;
-  key: string;
-}
 
 const AddVisor = (): JSX.Element => {
   const { visorsUptimeList } = useVisorsUptimeList();
-  const [inputValues, setInputValues] = useState<AddVisorInput | undefined>(
+  const [inputValues, setInputValues] = useState<MyVisor | undefined>(
     undefined
   );
-  const [visorStatusChecked, setVisorStatusChecked] = useState<
+
+  const [visorStatusSelected, setVisorStatusSelected] = useState<
     VisorUptime | undefined
   >(undefined);
+
+  const handleLabelSubmit = (newLabel: string | undefined): void => {
+    setInputValues((prevState): any => ({ ...prevState, newLabel }));
+  };
 
   const checkVisorStatus = (): void => {
     const visorStatus =
       inputValues?.key &&
       visorsUptimeList?.find((visor) => visor.key === inputValues.key);
-    if (visorStatus) setVisorStatusChecked(visorStatus);
+    if (visorStatus) setVisorStatusSelected(visorStatus);
   };
 
   const handleInputValue = (e: React.ChangeEvent<HTMLInputElement>): void =>
@@ -37,14 +37,6 @@ const AddVisor = (): JSX.Element => {
     <Container px={2} maxW="container.md">
       <Flex direction="column">
         <VStack>
-          <Flex direction="column" w="100%">
-            <Text>Label</Text>
-            <Input
-              name="label"
-              value={inputValues?.label}
-              onChange={handleInputValue}
-            />
-          </Flex>
           <Flex direction="column" w="100%">
             <Text>Public key</Text>
             <Input
@@ -60,21 +52,22 @@ const AddVisor = (): JSX.Element => {
               colorScheme="blue"
               onClick={checkVisorStatus}
             >
-              Check visor status
+              Check status
             </Button>
             <Button w="100%" colorScheme="blue">
               Add visor
             </Button>
           </HStack>
-          {visorStatusChecked && (
+          {visorStatusSelected && (
             <VisorCard
               visor={{
-                key: visorStatusChecked.key,
-                uptime: visorStatusChecked.uptime,
-                downtime: visorStatusChecked.downtime,
-                percentage: visorStatusChecked.percentage,
-                online: visorStatusChecked.online,
+                key: visorStatusSelected.key,
+                uptime: visorStatusSelected.uptime,
+                downtime: visorStatusSelected.downtime,
+                percentage: visorStatusSelected.percentage,
+                online: visorStatusSelected.online,
               }}
+              onLabelSubmit={handleLabelSubmit}
             />
           )}
         </VStack>
