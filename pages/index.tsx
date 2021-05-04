@@ -5,19 +5,19 @@ import AddVisor from '../components/AddVisor';
 import VisorsUptimeTable from '../components/VisorsUptimeTable';
 import MyVisors from '../components/MyVisors';
 
-const IndexPage = () => {
+const IndexPage = (): JSX.Element => {
   const { visorsUptimeList } = useVisorsUptimeList();
 
   return (
     <Layout>
       <VStack spacing={8}>
-        <VStack spacing={4}>
+        <VStack spacing={4} w="100%">
           <Heading as="h1" size="lg">
             Add your visors
           </Heading>
           <AddVisor />
         </VStack>
-        <VStack spacing={4}>
+        <VStack spacing={4} w="100%">
           <Heading as="h1" size="lg">
             Your Visors
           </Heading>
