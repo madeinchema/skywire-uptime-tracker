@@ -1,20 +1,41 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { VisorUptime } from '../../interfaces'
 
+/**
+ * State
+ */
+type VisorsUptimeState = {
+  status: 'loading' | 'success' | 'error'
+  visors: VisorUptime[]
+}
+
+const initialState: VisorsUptimeState = {
+  status: 'loading',
+  visors: [],
+}
+
+/**
+ * Actions' types
+ */
+interface SaveVisorsUptimeDataAction {
+  type: string
+  payload: VisorUptime[]
+}
+
+/**
+ * Slice
+ */
 export const visorsUptimeSlice = createSlice({
   name: 'visorsUptime',
-  initialState: {
-    status: 'loading',
-    visors: [],
-  },
+  initialState,
   reducers: {
-    saveVisorsUptimeData: (state, action) => {
+    saveVisorsUptimeData: (state, action: SaveVisorsUptimeDataAction) => {
       state.visors = action.payload
       state.status = 'success'
     },
   },
 })
 
-// Action creators are generated for each case reducer function
 export const { saveVisorsUptimeData } = visorsUptimeSlice.actions
 
 export default visorsUptimeSlice.reducer
