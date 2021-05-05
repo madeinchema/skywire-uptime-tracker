@@ -2,10 +2,10 @@ import { useState } from 'react'
 import { Button } from '@chakra-ui/button'
 import { Input } from '@chakra-ui/input'
 import { Container, Flex, HStack, Text, VStack } from '@chakra-ui/layout'
-import useVisorData from '../hooks/useVisorData'
-import { MyVisor } from '../interfaces'
+import useVisorData from '../../hooks/useVisorData'
+import { MyVisor } from '../../interfaces'
 
-import VisorCard from './VisorCard'
+import VisorCard from '../VisorCard'
 
 const AddVisor = (): JSX.Element => {
   const {
