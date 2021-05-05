@@ -1,3 +1,4 @@
+import { useToast } from '@chakra-ui/toast'
 import React, { useCallback, useState } from 'react'
 import { RootStateOrAny, useDispatch, useSelector } from 'react-redux'
 import { MyVisor, VisorKey, VisorUptime } from '../interfaces'
@@ -30,6 +31,7 @@ const useVisorData = (): UseVisorData => {
     (state: RootStateOrAny) => state.myVisors.visors
   )
   const dispatch = useDispatch()
+  const toast = useToast()
 
   /**
    * Utility functions
@@ -78,16 +80,22 @@ const useVisorData = (): UseVisorData => {
       addNewVisor: (visor: MyVisor): void => {
         const isVisorAlreadySaved = checkIsVisorAlreadySaved(visor.key)
         if (isVisorAlreadySaved) {
+          const error = 'This visor is already in your list.'
           setVisorData((prevState) => ({
             ...prevState,
-            error: 'This visor is already in your list.',
+            error,
           }))
+          toast({
+            title: error,
+            status: 'error',
+            isClosable: true,
+          })
         } else {
           dispatch(addNewVisor(visor))
         }
       },
     }),
-    [checkIsVisorAlreadySaved, dispatch, visorsUptimeListSelector]
+    [checkIsVisorAlreadySaved, dispatch, toast, visorsUptimeListSelector]
   )
 
   return { visorData, handlers }

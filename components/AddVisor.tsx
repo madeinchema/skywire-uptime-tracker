@@ -1,8 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Button } from '@chakra-ui/button'
 import { Input } from '@chakra-ui/input'
 import { Container, Flex, HStack, Text, VStack } from '@chakra-ui/layout'
-import { useToast } from '@chakra-ui/toast'
 import useVisorData from '../hooks/useVisorData'
 import { MyVisor } from '../interfaces'
 
@@ -14,7 +13,6 @@ const AddVisor = (): JSX.Element => {
     handlers: { checkVisorStatus, addNewVisor },
   } = useVisorData()
   const [inputValues, setInputValues] = useState<MyVisor | undefined>(undefined)
-  const toast = useToast()
 
   const handleInputValue = (e: React.ChangeEvent<HTMLInputElement>): void =>
     setInputValues((prevState): any => ({
@@ -26,21 +24,10 @@ const AddVisor = (): JSX.Element => {
     setInputValues((prevState): any => ({ ...prevState, label: newLabel }))
   }
 
-  useEffect(() => {
-    const isVisorAlreadySaved = visorData?.status === 'duplicate'
-    if (isVisorAlreadySaved) {
-      toast({
-        title: `This visor is already in your list.`,
-        status: 'error',
-        isClosable: true,
-      })
-    }
-  }, [toast, visorData?.status])
-
   return (
-    <Container px={2} maxW="container.md">
+    <Container px={2} maxW="container.sm">
       <Flex direction="column">
-        <VStack>
+        <VStack mb={5}>
           <Flex direction="column" w="100%">
             <Text>Public key</Text>
             <Input
@@ -66,6 +53,8 @@ const AddVisor = (): JSX.Element => {
               Add visor
             </Button>
           </HStack>
+        </VStack>
+        <Flex width="100%" justify="center">
           {visorData?.data && (
             <VisorCard
               visor={{
@@ -78,7 +67,7 @@ const AddVisor = (): JSX.Element => {
               onLabelSubmit={handleLabelSubmit}
             />
           )}
-        </VStack>
+        </Flex>
       </Flex>
     </Container>
   )
