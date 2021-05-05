@@ -12,16 +12,16 @@ const AddVisor = (): JSX.Element => {
     visorData,
     handlers: { checkVisorStatus, addNewVisor },
   } = useVisorData()
-  const [inputValues, setInputValues] = useState<MyVisor | undefined>(undefined)
+  const [inputValues, setInputValues] = useState<MyVisor>({ key: '' })
 
   const handleInputValue = (e: React.ChangeEvent<HTMLInputElement>): void =>
-    setInputValues((prevState): any => ({
+    setInputValues((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
     }))
 
   const handleLabelSubmit = (newLabel: string | undefined): void => {
-    setInputValues((prevState): any => ({ ...prevState, label: newLabel }))
+    setInputValues((prevState) => ({ key: prevState.key, label: newLabel }))
   }
 
   return (
