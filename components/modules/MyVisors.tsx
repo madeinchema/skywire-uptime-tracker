@@ -1,13 +1,13 @@
-import { Grid } from '@chakra-ui/layout';
-import React from 'react';
-import { VisorUptime } from '../interfaces';
-import VisorCard from './VisorCard';
+import { Grid } from '@chakra-ui/layout'
+import React from 'react'
+import { VisorUptime } from '../../interfaces'
+import VisorCard from '../VisorCard'
 
 type Props = {
-  visors: VisorUptime[] | undefined;
-};
+  visors: VisorUptime[] | undefined
+}
 
-const MyVisors = ({ visors }: Props) => {
+const MyVisors = ({ visors }: Props): JSX.Element => {
   return (
     <Grid
       templateColumns={{
@@ -21,7 +21,7 @@ const MyVisors = ({ visors }: Props) => {
       {visors &&
         visors.map((visor) => <VisorCard key={visor.key} visor={visor} />)}
     </Grid>
-  );
-};
+  )
+}
 
-export default MyVisors;
+export default MyVisors
