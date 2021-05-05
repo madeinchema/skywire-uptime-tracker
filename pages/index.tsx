@@ -1,16 +1,14 @@
-import { Heading, VStack } from '@chakra-ui/react';
-import Layout from '../components/Layout';
-import useVisorsUptimeList from '../hooks/useVisorsUptimeList';
-import AddVisor from '../components/AddVisor';
-import VisorsUptimeTable from '../components/VisorsUptimeTable';
-import MyVisors from '../components/MyVisors';
-import useMyVisorsList from '../hooks/useMyVisorsList';
+import { Heading, VStack } from '@chakra-ui/react'
+import Layout from '../components/layout/Layout'
+import useVisorsUptimeList from '../hooks/useVisorsUptimeList'
+import AddVisor from '../components/AddVisor'
+import VisorsUptimeTable from '../components/modules/VisorsUptimeTable'
+import MyVisors from '../components/modules/MyVisors'
+import useMyVisors from '../hooks/useMyVisors'
 
 const IndexPage = (): JSX.Element => {
-  const { visorsUptimeList } = useVisorsUptimeList();
-  const { myVisorsList } = useMyVisorsList();
-
-  console.log({index: myVisorsList})
+  const { visorsUptimeList } = useVisorsUptimeList()
+  const { myVisors } = useMyVisors()
 
   return (
     <Layout>
@@ -25,7 +23,7 @@ const IndexPage = (): JSX.Element => {
           <Heading as="h1" size="lg">
             Your Visors
           </Heading>
-          <MyVisors visors={myVisorsList} />
+          <MyVisors visors={myVisors} />
         </VStack>
         <Heading as="h1" size="lg">
           Visors List
@@ -33,7 +31,7 @@ const IndexPage = (): JSX.Element => {
         <VisorsUptimeTable dataSource={visorsUptimeList} />
       </VStack>
     </Layout>
-  );
-};
+  )
+}
 
-export default IndexPage;
+export default IndexPage
