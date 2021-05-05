@@ -1,34 +1,34 @@
-import { useColorMode } from '@chakra-ui/color-mode';
-import { Editable, EditableInput, EditablePreview } from '@chakra-ui/editable';
-import { useClipboard } from '@chakra-ui/hooks';
-import { Box, Flex, HStack, Text, VStack } from '@chakra-ui/layout';
-import { useToast } from '@chakra-ui/toast';
-import { Tooltip } from '@chakra-ui/tooltip';
-import React, { useMemo } from 'react';
-import { MyVisorUptime } from '../interfaces';
+import { useColorMode } from '@chakra-ui/color-mode'
+import { Editable, EditableInput, EditablePreview } from '@chakra-ui/editable'
+import { useClipboard } from '@chakra-ui/hooks'
+import { Box, Flex, HStack, Text, VStack } from '@chakra-ui/layout'
+import { useToast } from '@chakra-ui/toast'
+import { Tooltip } from '@chakra-ui/tooltip'
+import React, { useMemo } from 'react'
+import { MyVisorUptime } from '../interfaces'
 import {
   formatPercentage,
   formatSecsToDays,
-} from '../utils/functions/dataFormatter';
+} from '../utils/functions/dataFormatter'
 
 type VisorCardProps = {
-  visor: MyVisorUptime;
-  onLabelSubmit?: (value: string) => void;
-};
+  visor: MyVisorUptime
+  onLabelSubmit?: (value: string) => void
+}
 
 const VisorCard = ({ visor, onLabelSubmit }: VisorCardProps): JSX.Element => {
-  const toast = useToast();
-  const { onCopy } = useClipboard(visor.key);
-  const { colorMode } = useColorMode();
+  const toast = useToast()
+  const { onCopy } = useClipboard(visor.key)
+  const { colorMode } = useColorMode()
 
   const handleCopyVisorKey = (): void => {
-    onCopy();
+    onCopy()
     toast({
       title: 'The public key has been copied.',
       status: 'success',
       duration: 3000,
-    });
-  };
+    })
+  }
 
   const formattedVisorData = useMemo(
     () => ({
@@ -37,7 +37,7 @@ const VisorCard = ({ visor, onLabelSubmit }: VisorCardProps): JSX.Element => {
       percentage: formatPercentage(visor.percentage),
     }),
     [visor.downtime, visor.percentage, visor.uptime]
-  );
+  )
 
   return (
     <VStack
@@ -61,7 +61,7 @@ const VisorCard = ({ visor, onLabelSubmit }: VisorCardProps): JSX.Element => {
           <Editable
             fontWeight="700"
             defaultValue={visor.label ? visor.label : 'Visor'}
-            onChange={onLabelSubmit && onLabelSubmit}
+            onSubmit={onLabelSubmit && onLabelSubmit}
           >
             <EditablePreview />
             <EditableInput />
@@ -88,7 +88,7 @@ const VisorCard = ({ visor, onLabelSubmit }: VisorCardProps): JSX.Element => {
         </Text>
       </Flex>
     </VStack>
-  );
-};
+  )
+}
 
-export default VisorCard;
+export default VisorCard
