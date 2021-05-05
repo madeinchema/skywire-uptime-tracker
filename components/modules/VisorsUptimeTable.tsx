@@ -7,19 +7,18 @@ import {
   Td,
   Box,
   Container,
-} from '@chakra-ui/react';
-import { useMemo } from 'react';
-import { VisorUptime } from '../interfaces';
+} from '@chakra-ui/react'
+import { VisorUptime } from '../../interfaces'
 import {
   formatPercentage,
   formatSecsToDays,
-} from '../utils/functions/dataFormatter';
+} from '../../utils/functions/dataFormatter'
 
 type Props = {
-  dataSource: VisorUptime[] | undefined;
-};
+  dataSource: VisorUptime[] | undefined
+}
 
-const VisorsUptimeTable = ({ dataSource }: Props) => {
+const VisorsUptimeTable = ({ dataSource }: Props): JSX.Element => {
   return (
     <Container px={2} maxW="container.lg">
       <Box overflowX="auto" width="100%">
@@ -36,14 +35,11 @@ const VisorsUptimeTable = ({ dataSource }: Props) => {
           <Tbody>
             {dataSource &&
               dataSource.map((visor) => {
-                const formattedVisorData = useMemo(
-                  () => ({
-                    uptime: formatSecsToDays(visor.uptime),
-                    downtime: formatSecsToDays(visor.downtime),
-                    percentage: formatPercentage(visor.percentage),
-                  }),
-                  []
-                );
+                const formattedVisorData = {
+                  uptime: formatSecsToDays(visor.uptime),
+                  downtime: formatSecsToDays(visor.downtime),
+                  percentage: formatPercentage(visor.percentage),
+                }
 
                 return (
                   <Tr key={visor.key} fontWeight={500}>
@@ -60,13 +56,13 @@ const VisorsUptimeTable = ({ dataSource }: Props) => {
                     <Td isNumeric>{formattedVisorData.uptime}</Td>
                     <Td isNumeric>{formattedVisorData.downtime}</Td>
                   </Tr>
-                );
+                )
               })}
           </Tbody>
         </Table>
       </Box>
     </Container>
-  );
-};
+  )
+}
 
-export default VisorsUptimeTable;
+export default VisorsUptimeTable
