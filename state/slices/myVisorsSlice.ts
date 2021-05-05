@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { MyVisor } from '../../interfaces'
+import { VisorKey, MyVisor, VisorLabel } from '../../interfaces/index'
 
 /**
  * State
@@ -19,6 +19,13 @@ interface AddNewVisorAction {
   type: string
   payload: MyVisor
 }
+interface UpdateVisorAction {
+  type: string
+  payload: {
+    key: VisorKey
+    label: VisorLabel
+  }
+}
 
 /**
  * Slice
@@ -37,9 +44,28 @@ export const myVisorsSlice = createSlice({
       }
       state.visors = [...state.visors, newVisor]
     },
+    updateVisorLabel: (
+      state,
+      { payload: { key, label } }: UpdateVisorAction
+    ) => {
+      const canFindVisorToUpdate = state.visors.find(
+        (visor) => visor.key === key
+      )
+      if (canFindVisorToUpdate) {
+        const updatedVisor = { label, key }
+        const updatedVisorsList = state.visors.map((visor) =>
+          visor.key === key ? updatedVisor : visor
+        )
+        state.visors = updatedVisorsList
+      }
+    },
   },
 })
 
-export const { addNewVisor, saveMyVisorsData } = myVisorsSlice.actions
+export const {
+  addNewVisor,
+  saveMyVisorsData,
+  updateVisorLabel,
+} = myVisorsSlice.actions
 
 export default myVisorsSlice.reducer
