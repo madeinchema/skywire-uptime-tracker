@@ -1,12 +1,23 @@
 import React, { useEffect, useState } from 'react'
 import { RootStateOrAny, useDispatch, useSelector } from 'react-redux'
-import { MyVisorUptime, VisorUptime } from '../interfaces'
-import { saveMyVisorsData } from '../state/slices/myVisorsSlice'
+import {
+  MyVisor,
+  MyVisorUptime,
+  VisorKey,
+  VisorLabel,
+  VisorUptime,
+} from '../interfaces'
+import {
+  saveMyVisorsData,
+  updateVisorLabel,
+} from '../state/slices/myVisorsSlice'
 import { getMyVisorsList } from '../utils/functions/getVisorsList'
 
 interface UseMyVisors {
   myVisors: VisorUptime[] | undefined
-  handlers: unknown
+  handlers: {
+    updateVisorLabel: (key: VisorKey, label: VisorLabel) => void
+  }
 }
 
 const useMyVisors = (): UseMyVisors => {
@@ -37,10 +48,21 @@ const useMyVisors = (): UseMyVisors => {
    * Update myVisorsList on store changes
    */
   useEffect(() => {
-    const myVisorsDataList = visorsUptimeListSelector.filter((visor) => {
-      return myVisorsSelector.some((myVisor) => visor.key === myVisor.key)
-    })
-    setMyVisors(myVisorsDataList)
+    const visorKeysToMatch = myVisorsSelector.map(
+      (myVisor: MyVisor) => myVisor.key
+    )
+    const visorUptimesThatMatch = visorsUptimeListSelector.filter(
+      (visor: VisorUptime) => visorKeysToMatch.includes(visor.key)
+    )
+    const myVisorsUptimesWithLabels = visorUptimesThatMatch.map(
+      (visor: VisorUptime) => {
+        const myVisorToUpdate = myVisorsSelector.find(
+          (myVisor: MyVisor) => myVisor.key === visor.key
+        )
+        return { ...visor, label: myVisorToUpdate.label }
+      }
+    )
+    setMyVisors(myVisorsUptimesWithLabels)
   }, [myVisorsSelector, visorsUptimeListSelector])
 
   /**
@@ -50,7 +72,14 @@ const useMyVisors = (): UseMyVisors => {
   /**
    * Handlers
    */
-  const handlers = React.useMemo(() => ({}), [])
+  const handlers = React.useMemo(
+    () => ({
+      updateVisorLabel: (key: VisorKey, label: VisorLabel) => {
+        dispatch(updateVisorLabel({ key, label }))
+      },
+    }),
+    [dispatch]
+  )
 
   return { myVisors, handlers }
 }
