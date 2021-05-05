@@ -20,8 +20,8 @@ const AddVisor = (): JSX.Element => {
       key: e.target.value,
     }))
 
-  const onLabelSubmit = (key: VisorKey, newLabel: string | undefined): void => {
-    setInputValues((prevState) => ({ key: prevState.key, label: newLabel }))
+  const onLabelSubmit = (key: VisorKey, label: string | undefined): void => {
+    setInputValues({ key, label })
   }
 
   const onClickCheckStatus = useCallback(() => {
