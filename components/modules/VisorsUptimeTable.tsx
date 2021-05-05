@@ -8,17 +8,15 @@ import {
   Box,
   Container,
 } from '@chakra-ui/react'
-import { VisorUptime } from '../../interfaces'
+import useVisorsUptimeList from '../../hooks/useVisorsUptimeList'
 import {
   formatPercentage,
   formatSecsToDays,
 } from '../../utils/functions/dataFormatter'
 
-type Props = {
-  dataSource: VisorUptime[] | undefined
-}
+const VisorsUptimeTable = (): JSX.Element => {
+  const { visorsUptimeList } = useVisorsUptimeList()
 
-const VisorsUptimeTable = ({ dataSource }: Props): JSX.Element => {
   return (
     <Container px={2} maxW="container.lg">
       <Box overflowX="auto" width="100%">
@@ -33,8 +31,8 @@ const VisorsUptimeTable = ({ dataSource }: Props): JSX.Element => {
             </Tr>
           </Thead>
           <Tbody>
-            {dataSource &&
-              dataSource.map((visor) => {
+            {visorsUptimeList &&
+              visorsUptimeList.map((visor) => {
                 const formattedVisorData = {
                   uptime: formatSecsToDays(visor.uptime),
                   downtime: formatSecsToDays(visor.downtime),

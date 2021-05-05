@@ -1,15 +1,10 @@
 import { Heading, VStack } from '@chakra-ui/react'
 import Layout from '../components/layout/Layout'
-import useVisorsUptimeList from '../hooks/useVisorsUptimeList'
-import AddVisor from '../components/AddVisor'
+import AddVisor from '../components/modules/AddVisor'
 import VisorsUptimeTable from '../components/modules/VisorsUptimeTable'
 import MyVisors from '../components/modules/MyVisors'
-import useMyVisors from '../hooks/useMyVisors'
 
 const IndexPage = (): JSX.Element => {
-  const { visorsUptimeList } = useVisorsUptimeList()
-  const { myVisors } = useMyVisors()
-
   return (
     <Layout>
       <VStack spacing={8}>
@@ -23,12 +18,12 @@ const IndexPage = (): JSX.Element => {
           <Heading as="h1" size="lg">
             Your Visors
           </Heading>
-          <MyVisors visors={myVisors} />
+          <MyVisors />
         </VStack>
         <Heading as="h1" size="lg">
           Visors List
         </Heading>
-        <VisorsUptimeTable dataSource={visorsUptimeList} />
+        <VisorsUptimeTable />
       </VStack>
     </Layout>
   )
