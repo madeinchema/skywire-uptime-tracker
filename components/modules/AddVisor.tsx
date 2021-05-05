@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { Button } from '@chakra-ui/button'
 import { Input } from '@chakra-ui/input'
 import { Container, Flex, HStack, Text, VStack } from '@chakra-ui/layout'
@@ -20,12 +20,17 @@ const AddVisor = (): JSX.Element => {
       key: e.target.value,
     }))
 
-  const handleLabelSubmit = (
-    key: VisorKey,
-    newLabel: string | undefined
-  ): void => {
+  const onLabelSubmit = (key: VisorKey, newLabel: string | undefined): void => {
     setInputValues((prevState) => ({ key: prevState.key, label: newLabel }))
   }
+
+  const onClickCheckStatus = useCallback(() => {
+    checkVisorStatus(inputValues.key)
+  }, [checkVisorStatus, inputValues.key])
+
+  const onClickAddVisor = useCallback(() => {
+    addNewVisor(inputValues)
+  }, [addNewVisor, inputValues])
 
   return (
     <Container px={2} maxW="container.sm">
@@ -44,15 +49,11 @@ const AddVisor = (): JSX.Element => {
               w="100%"
               variant="outline"
               colorScheme="blue"
-              onClick={() => checkVisorStatus(inputValues.key)}
+              onClick={onClickCheckStatus}
             >
               Check status
             </Button>
-            <Button
-              w="100%"
-              colorScheme="blue"
-              onClick={() => addNewVisor(inputValues)}
-            >
+            <Button w="100%" colorScheme="blue" onClick={onClickAddVisor}>
               Add visor
             </Button>
           </HStack>
@@ -67,7 +68,7 @@ const AddVisor = (): JSX.Element => {
                 percentage: visorData.data.percentage,
                 online: visorData.data.online,
               }}
-              onLabelSubmit={handleLabelSubmit}
+              onLabelSubmit={onLabelSubmit}
             />
           )}
         </Flex>
