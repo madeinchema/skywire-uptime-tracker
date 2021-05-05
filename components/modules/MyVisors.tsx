@@ -1,16 +1,13 @@
 import { Grid } from '@chakra-ui/layout'
 import React from 'react'
 import useMyVisors from '../../hooks/useMyVisors'
-import { VisorUptime } from '../../interfaces'
 import VisorCard from '../VisorCard'
 
 const MyVisors = (): JSX.Element => {
-  const { myVisors } = useMyVisors()
-  const { handlers } = useMyVisors()
-
-  const handleLabelSubmit = () => {
-    console.log('handleLabelSubmit')
-  }
+  const {
+    myVisors,
+    handlers: { updateVisorLabel },
+  } = useMyVisors()
 
   return (
     <Grid
@@ -27,7 +24,7 @@ const MyVisors = (): JSX.Element => {
           <VisorCard
             key={visor.key}
             visor={visor}
-            onLabelSubmit={handleLabelSubmit}
+            onLabelSubmit={updateVisorLabel}
           />
         ))}
     </Grid>

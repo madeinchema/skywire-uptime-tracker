@@ -5,7 +5,7 @@ import { Box, Flex, HStack, Text, VStack } from '@chakra-ui/layout'
 import { useToast } from '@chakra-ui/toast'
 import { Tooltip } from '@chakra-ui/tooltip'
 import React, { useMemo } from 'react'
-import { MyVisorUptime } from '../interfaces'
+import { MyVisorUptime, VisorKey, VisorLabel } from '../interfaces'
 import {
   formatPercentage,
   formatSecsToDays,
@@ -13,7 +13,7 @@ import {
 
 type VisorCardProps = {
   visor: MyVisorUptime
-  onLabelSubmit?: (value: string) => void
+  onLabelSubmit?: (value: string, key: VisorKey) => void
 }
 
 const VisorCard = ({ visor, onLabelSubmit }: VisorCardProps): JSX.Element => {
@@ -39,6 +39,10 @@ const VisorCard = ({ visor, onLabelSubmit }: VisorCardProps): JSX.Element => {
     [visor.downtime, visor.percentage, visor.uptime]
   )
 
+  const handleLabelSubmit = (newLabel: VisorLabel): void => {
+    if (onLabelSubmit) onLabelSubmit(visor.key, newLabel)
+  }
+
   return (
     <VStack
       align="flex-start"
@@ -60,8 +64,8 @@ const VisorCard = ({ visor, onLabelSubmit }: VisorCardProps): JSX.Element => {
 
           <Editable
             fontWeight="700"
-            defaultValue={visor.label ? visor.label : 'Visor'}
-            onSubmit={onLabelSubmit && onLabelSubmit}
+            defaultValue={visor.label || 'Visor'}
+            onSubmit={handleLabelSubmit}
           >
             <EditablePreview />
             <EditableInput />
