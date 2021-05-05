@@ -1,31 +1,33 @@
-import sampleMyVisorsData from '../sample-my-visors-data';
-import sampleVisorsUptimeData from '../sample-visors-uptime-data';
+import sampleMyVisorsData from '../sample-my-visors-data'
+import sampleVisorsUptimeData from '../sample-visors-uptime-data'
 
-const getVisorsList = async (useFakeData = false): Promise<any> => {
-  if (useFakeData) {
+type UseFakeData = 'USE_FAKE_DATA' | undefined
+
+const getVisorsList = async (useFakeData: UseFakeData): Promise<any> => {
+  if (useFakeData === 'USE_FAKE_DATA') {
     return new Promise((res) => {
-      res(sampleVisorsUptimeData);
-    });
+      res(sampleVisorsUptimeData)
+    })
   }
   const visorsList = await fetch('http://localhost:8080/visors', {
     headers: { 'Content-Type': 'application/json' },
-  }).then((res) => res.json());
-  return visorsList;
-};
+  }).then((res) => res.json())
+  return visorsList
+}
 
-const getMyVisorsList = async (useFakeData = false): Promise<any> => {
-  if (useFakeData) {
+const getMyVisorsList = async (useFakeData: UseFakeData): Promise<any> => {
+  if (useFakeData === 'USE_FAKE_DATA') {
     return new Promise((res) => {
-      res(sampleMyVisorsData);
-    });
+      res(sampleMyVisorsData)
+    })
   }
   return new Promise((res) => {
-    res(sampleMyVisorsData);
-  });
+    res(sampleMyVisorsData)
+  })
   // const visorsList = await fetch('http://localhost:8080/visors', {
   //   headers: { 'Content-Type': 'application/json' },
   // }).then((res) => res.json());
   // return visorsList;
-};
+}
 
-export { getVisorsList, getMyVisorsList };
+export { getVisorsList, getMyVisorsList }
