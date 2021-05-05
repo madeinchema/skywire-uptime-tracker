@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit'
 
 export const visorsUptimeSlice = createSlice({
   name: 'visorsUptime',
@@ -8,13 +8,13 @@ export const visorsUptimeSlice = createSlice({
   },
   reducers: {
     saveVisorsUptimeData: (state, action) => {
-      state.visors = action.payload;
-      state.status = 'success';
+      state.visors = action.payload
+      state.status = 'success'
     },
   },
-});
+})
 
 // Action creators are generated for each case reducer function
-export const { saveVisorsUptimeData } = visorsUptimeSlice.actions;
+export const { saveVisorsUptimeData } = visorsUptimeSlice.actions
 
-export default visorsUptimeSlice.reducer;
+export default visorsUptimeSlice.reducer
