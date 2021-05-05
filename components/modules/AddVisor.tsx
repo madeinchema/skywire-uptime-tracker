@@ -3,7 +3,7 @@ import { Button } from '@chakra-ui/button'
 import { Input } from '@chakra-ui/input'
 import { Container, Flex, HStack, Text, VStack } from '@chakra-ui/layout'
 import useVisorData from '../../hooks/useVisorData'
-import { MyVisor } from '../../interfaces'
+import { MyVisor, VisorKey } from '../../interfaces'
 
 import VisorCard from '../VisorCard'
 
@@ -14,13 +14,16 @@ const AddVisor = (): JSX.Element => {
   } = useVisorData()
   const [inputValues, setInputValues] = useState<MyVisor>({ key: '' })
 
-  const handleInputValue = (e: React.ChangeEvent<HTMLInputElement>): void =>
+  const handleKeyInput = (e: React.ChangeEvent<HTMLInputElement>): void =>
     setInputValues((prevState) => ({
       ...prevState,
-      [e.target.name]: e.target.value,
+      key: e.target.value,
     }))
 
-  const handleLabelSubmit = (newLabel: string | undefined): void => {
+  const handleLabelSubmit = (
+    key: VisorKey,
+    newLabel: string | undefined
+  ): void => {
     setInputValues((prevState) => ({ key: prevState.key, label: newLabel }))
   }
 
@@ -33,7 +36,7 @@ const AddVisor = (): JSX.Element => {
             <Input
               name="key"
               value={inputValues?.key}
-              onChange={handleInputValue}
+              onChange={handleKeyInput}
             />
           </Flex>
           <HStack direction="column" w="100%">
