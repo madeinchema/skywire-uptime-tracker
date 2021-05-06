@@ -12,6 +12,7 @@ import {
   EditableInput,
   IconButton,
 } from '@chakra-ui/react'
+import { MdClose } from 'react-icons/md'
 import { useDispatch } from 'react-redux'
 import {
   formatPercentage,
@@ -106,9 +107,16 @@ const VisorsTable = ({
                           aria-label="Remove visor"
                           size="xs"
                           onClick={() => handleVisorRemoval(visor.key)}
-                        >
-                          Remove
-                        </IconButton>
+                          colorScheme="red"
+                          isRound
+                          opacity={0.5}
+                          _hover={{ opacity: 1 }}
+                          icon={
+                            <MdClose
+                              style={{ strokeWidth: 3, stroke: 'white' }}
+                            />
+                          }
+                        />
                       </Td>
                     )}
                   </Tr>
