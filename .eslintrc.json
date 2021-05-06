@@ -47,7 +47,12 @@
     "react/require-default-props": "off",
     "react/react-in-jsx-scope": "off",
     "import/no-extraneous-dependencies": "off",
-    "prettier/prettier": "warn",
+    "prettier/prettier": [
+      "warn",
+      {
+        "endOfLine": "auto"
+      }
+    ],
     // Ignore for Redux Toolkit's State Immutability
     "no-param-reassign": [
       "error",

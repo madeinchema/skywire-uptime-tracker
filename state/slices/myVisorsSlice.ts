@@ -37,10 +37,10 @@ export const myVisorsSlice = createSlice({
     saveMyVisorsData: (state, action) => {
       state.visors = action.payload
     },
-    addNewVisor: (state, action: AddNewVisorAction) => {
+    addNewVisor: (state, { payload: { key, label } }: AddNewVisorAction) => {
       const newVisor = {
-        label: action.payload.label || 'Visor',
-        ...action.payload,
+        key,
+        label: label || 'Visor',
       }
       state.visors = [...state.visors, newVisor]
     },
@@ -59,6 +59,9 @@ export const myVisorsSlice = createSlice({
         state.visors = updatedVisorsList
       }
     },
+    removeVisor: (state, { payload: { key } }) => {
+      state.visors = state.visors.filter((visor) => visor.key !== key)
+    },
   },
 })
 
@@ -66,6 +69,7 @@ export const {
   addNewVisor,
   saveMyVisorsData,
   updateVisorLabel,
+  removeVisor,
 } = myVisorsSlice.actions
 
 export default myVisorsSlice.reducer

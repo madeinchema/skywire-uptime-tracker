@@ -64,7 +64,7 @@ const VisorCard = ({ visor, onLabelSubmit }: VisorCardProps): JSX.Element => {
 
           <Editable
             fontWeight="700"
-            defaultValue={visor.label || 'Visor'}
+            defaultValue={visor.label}
             onSubmit={handleLabelSubmit}
           >
             <EditablePreview />

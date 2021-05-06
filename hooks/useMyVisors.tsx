@@ -10,6 +10,7 @@ import {
 import {
   saveMyVisorsData,
   updateVisorLabel,
+  removeVisor,
 } from '../state/slices/myVisorsSlice'
 import { getMyVisorsList } from '../utils/functions/getVisorsList'
 
@@ -17,6 +18,7 @@ interface UseMyVisors {
   myVisors: MyVisorUptime[] | undefined
   handlers: {
     updateVisorLabel: (key: VisorKey, label: VisorLabel) => void
+    removeVisor: (key: VisorKey) => void
   }
 }
 
@@ -24,7 +26,7 @@ function useMyVisors(): UseMyVisors {
   const [myVisors, setMyVisors] = useState<MyVisorUptime[] | undefined>(
     undefined
   )
-  const myVisorsSelector = useSelector(
+  const myVisorsSelector: MyVisor[] = useSelector(
     (state: RootStateOrAny) => state.myVisors.visors
   )
   const visorsUptimeListSelector = useSelector(
@@ -51,18 +53,23 @@ function useMyVisors(): UseMyVisors {
     const visorKeysToMatch = myVisorsSelector.map(
       (myVisor: MyVisor) => myVisor.key
     )
-    const visorUptimesThatMatch = visorsUptimeListSelector.filter(
+    const matchingVisors = visorsUptimeListSelector.filter(
       (visor: VisorUptime) => visorKeysToMatch.includes(visor.key)
     )
-    const myVisorsUptimesWithLabels = visorUptimesThatMatch.map(
+    const myVisorsUptimesWithLabels = matchingVisors.map(
       (visor: VisorUptime) => {
         const myVisorToUpdate = myVisorsSelector.find(
           (myVisor: MyVisor) => myVisor.key === visor.key
         )
-        return { ...visor, label: myVisorToUpdate.label }
+        return myVisorToUpdate && { ...visor, label: myVisorToUpdate.label }
       }
     )
-    setMyVisors(myVisorsUptimesWithLabels)
+    const sortedVisors = myVisorsUptimesWithLabels.sort(
+      (a: MyVisorUptime, b: MyVisorUptime) =>
+        a.label.localeCompare(b.label, 'en', { numeric: true })
+    )
+
+    setMyVisors(sortedVisors)
   }, [myVisorsSelector, visorsUptimeListSelector])
 
   /**
@@ -76,6 +83,9 @@ function useMyVisors(): UseMyVisors {
     () => ({
       updateVisorLabel: (key: VisorKey, label: VisorLabel) => {
         dispatch(updateVisorLabel({ key, label }))
+      },
+      removeVisor: (key: VisorKey) => {
+        dispatch(removeVisor({ key }))
       },
     }),
     [dispatch]
