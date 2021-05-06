@@ -10,6 +10,7 @@ import {
 import {
   saveMyVisorsData,
   updateVisorLabel,
+  removeVisor,
 } from '../state/slices/myVisorsSlice'
 import { getMyVisorsList } from '../utils/functions/getVisorsList'
 
@@ -17,6 +18,7 @@ interface UseMyVisors {
   myVisors: MyVisorUptime[] | undefined
   handlers: {
     updateVisorLabel: (key: VisorKey, label: VisorLabel) => void
+    removeVisor: (key: VisorKey) => void
   }
 }
 
@@ -81,6 +83,9 @@ function useMyVisors(): UseMyVisors {
     () => ({
       updateVisorLabel: (key: VisorKey, label: VisorLabel) => {
         dispatch(updateVisorLabel({ key, label }))
+      },
+      removeVisor: (key: VisorKey) => {
+        dispatch(removeVisor({ key }))
       },
     }),
     [dispatch]
