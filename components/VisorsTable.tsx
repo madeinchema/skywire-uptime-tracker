@@ -10,12 +10,15 @@ import {
   Editable,
   EditablePreview,
   EditableInput,
+  IconButton,
 } from '@chakra-ui/react'
+import { useDispatch } from 'react-redux'
 import {
   formatPercentage,
   formatSecsToDays,
 } from '../utils/functions/dataFormatter'
 import { VisorUptime, MyVisorUptime, VisorKey, VisorLabel } from '../interfaces'
+import { removeVisor } from '../state/slices/myVisorsSlice'
 
 type VisorFromDataSource = VisorUptime | MyVisorUptime
 type DataSource = VisorUptime[] | MyVisorUptime[]
@@ -32,6 +35,11 @@ const VisorsTable = ({
   const areVisorsWithLabel = (
     dataToCheck: DataSource
   ): dataToCheck is DataSource => dataToCheck.some((visor) => 'label' in visor)
+  const dispatch = useDispatch()
+
+  const handleVisorRemoval = (key: VisorKey): void => {
+    dispatch(removeVisor({ key }))
+  }
 
   return (
     <Container px={2} maxW="container.xl">
@@ -45,13 +53,14 @@ const VisorsTable = ({
               <Th isNumeric>Percentage</Th>
               <Th isNumeric>Uptime</Th>
               <Th isNumeric>Downtime</Th>
+              {dataSource && areVisorsWithLabel(dataSource) && <Th />}
             </Tr>
           </Thead>
           <Tbody>
             {dataSource &&
               dataSource.map((visor: VisorFromDataSource) => {
                 // TODO: Can this check be done at the dataSource level?
-                const isVisorWithLabel = (
+                const isMyVisor = (
                   visorToCheck: VisorFromDataSource
                 ): visorToCheck is MyVisorUptime => 'label' in visorToCheck
                 const formattedVisorData = {
@@ -70,17 +79,20 @@ const VisorsTable = ({
                         bgColor={visor.online ? 'green' : 'red'}
                       />
                     </Td>
-                    {isVisorWithLabel(visor) && (
-                      <Editable
-                        fontWeight="700"
-                        defaultValue={visor.label}
-                        onSubmit={(value) =>
-                          onLabelSubmit && onLabelSubmit(visor.key, value)
-                        }
-                      >
-                        <EditablePreview />
-                        <EditableInput />
-                      </Editable>
+
+                    {isMyVisor(visor) && (
+                      <Td>
+                        <Editable
+                          fontWeight="700"
+                          defaultValue={visor.label}
+                          onSubmit={(value) =>
+                            onLabelSubmit && onLabelSubmit(visor.key, value)
+                          }
+                        >
+                          <EditablePreview />
+                          <EditableInput />
+                        </Editable>
+                      </Td>
                     )}
                     <Td wordBreak="break-all" minW="320px">
                       {visor.key}
@@ -88,6 +100,17 @@ const VisorsTable = ({
                     <Td isNumeric>{formattedVisorData.percentage}</Td>
                     <Td isNumeric>{formattedVisorData.uptime}</Td>
                     <Td isNumeric>{formattedVisorData.downtime}</Td>
+                    {isMyVisor(visor) && (
+                      <Td>
+                        <IconButton
+                          aria-label="Remove visor"
+                          size="xs"
+                          onClick={() => handleVisorRemoval(visor.key)}
+                        >
+                          Remove
+                        </IconButton>
+                      </Td>
+                    )}
                   </Tr>
                 )
               })}
