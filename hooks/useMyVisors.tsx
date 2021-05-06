@@ -24,7 +24,7 @@ function useMyVisors(): UseMyVisors {
   const [myVisors, setMyVisors] = useState<MyVisorUptime[] | undefined>(
     undefined
   )
-  const myVisorsSelector = useSelector(
+  const myVisorsSelector: MyVisor[] = useSelector(
     (state: RootStateOrAny) => state.myVisors.visors
   )
   const visorsUptimeListSelector = useSelector(
@@ -62,7 +62,10 @@ function useMyVisors(): UseMyVisors {
         return { ...visor, label: myVisorToUpdate.label }
       }
     )
-    setMyVisors(myVisorsUptimesWithLabels)
+    const sortedVisors = myVisorsUptimesWithLabels.sort(
+      (a: MyVisorUptime, b: MyVisorUptime) => a.label.localeCompare(b.label)
+    )
+    setMyVisors(sortedVisors)
   }, [myVisorsSelector, visorsUptimeListSelector])
 
   /**
