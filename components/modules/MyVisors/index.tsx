@@ -1,7 +1,7 @@
 import { Heading, VStack } from '@chakra-ui/layout'
 import React from 'react'
-import useMyVisors from '../../hooks/useMyVisors'
-import VisorsTable from '../VisorsTable'
+import useMyVisors from '../../../hooks/useMyVisors'
+import VisorsTable from '../../VisorsTable'
 
 const MyVisors = (): JSX.Element => {
   const {

@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { Button } from '@chakra-ui/button'
 import { Input } from '@chakra-ui/input'
 import {
@@ -19,10 +19,13 @@ const AddVisor = (): JSX.Element => {
     visorData,
     handlers: { checkVisorStatus, addNewVisor },
   } = useVisorData()
-  const [inputValues, setInputValues] = useState<MyVisor>({
-    key: '',
-    label: 'Visor',
-  })
+  const initialInputValuesState = useMemo(
+    () => ({ key: '', label: 'Visor' }),
+    []
+  )
+  const [inputValues, setInputValues] = useState<MyVisor>(
+    initialInputValuesState
+  )
 
   const handleKeyInput = (e: React.ChangeEvent<HTMLInputElement>): void =>
     setInputValues((prevState) => ({
@@ -36,7 +39,8 @@ const AddVisor = (): JSX.Element => {
 
   const onClickCheckStatus = useCallback(() => {
     checkVisorStatus(inputValues.key)
-  }, [checkVisorStatus, inputValues.key])
+    setInputValues(initialInputValuesState)
+  }, [checkVisorStatus, initialInputValuesState, inputValues.key])
 
   const onClickAddVisor = useCallback(() => {
     addNewVisor(inputValues)
@@ -60,14 +64,25 @@ const AddVisor = (): JSX.Element => {
               />
             </Flex>
             <HStack direction="column" w="100%">
-              <Button
-                w="100%"
-                variant="outline"
-                colorScheme="blue"
-                onClick={onClickCheckStatus}
-              >
-                Check status
-              </Button>
+              {visorData.data && visorData.success ? (
+                <Button
+                  w="100%"
+                  variant="outline"
+                  colorScheme={inputValues.key.length > 0 ? 'blue' : 'red'}
+                  onClick={onClickCheckStatus}
+                >
+                  {inputValues.key.length > 0 ? 'Check other visor' : 'Reset'}
+                </Button>
+              ) : (
+                <Button
+                  w="100%"
+                  variant="outline"
+                  colorScheme="blue"
+                  onClick={onClickCheckStatus}
+                >
+                  Check status
+                </Button>
+              )}
               <Button w="100%" colorScheme="blue" onClick={onClickAddVisor}>
                 Add visor
               </Button>
