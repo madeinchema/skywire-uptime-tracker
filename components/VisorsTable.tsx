@@ -17,13 +17,11 @@ import { VisorUptime, MyVisorUptime } from '../interfaces'
 type VisorFromDataSource = VisorUptime | MyVisorUptime
 type DataSource = VisorUptime[] | MyVisorUptime[]
 
-interface VisorsUptimeTableProps {
+interface VisorsTableProps {
   dataSource: DataSource | undefined
 }
 
-const VisorsUptimeTable = ({
-  dataSource,
-}: VisorsUptimeTableProps): JSX.Element => {
+const VisorsTable = ({ dataSource }: VisorsTableProps): JSX.Element => {
   const areVisorsWithLabel = (
     dataToCheck: DataSource
   ): dataToCheck is DataSource => dataToCheck.some((visor) => 'label' in visor)
@@ -83,4 +81,4 @@ const VisorsUptimeTable = ({
   )
 }
 
-export default VisorsUptimeTable
+export default VisorsTable

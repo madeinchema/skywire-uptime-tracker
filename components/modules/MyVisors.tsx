@@ -1,7 +1,7 @@
 import { Heading, VStack } from '@chakra-ui/layout'
 import React from 'react'
 import useMyVisors from '../../hooks/useMyVisors'
-import VisorsUptimeTable from '../VisorsTable'
+import VisorsTable from '../VisorsTable'
 
 const MyVisors = (): JSX.Element => {
   const {
@@ -14,7 +14,7 @@ const MyVisors = (): JSX.Element => {
       <Heading as="h1" size="lg">
         Your Visors
       </Heading>
-      <VisorsUptimeTable dataSource={myVisors} />
+      <VisorsTable dataSource={myVisors} />
     </VStack>
   )
 }

@@ -1,8 +1,9 @@
 import { Heading, VStack } from '@chakra-ui/react'
+
 import Layout from '../components/layout/Layout'
 import AddVisor from '../components/modules/AddVisor'
-import VisorsUptimeTable from '../components/modules/VisorsUptimeTable'
 import MyVisors from '../components/modules/MyVisors'
+import VisorsList from '../components/modules/VisorsList'
 
 const IndexPage = (): JSX.Element => {
   return (
@@ -16,11 +17,7 @@ const IndexPage = (): JSX.Element => {
         </VStack>
 
         <MyVisors />
-
-        <Heading as="h1" size="lg">
-          Visors List
-        </Heading>
-        <VisorsUptimeTable />
+        <VisorsList />
       </VStack>
     </Layout>
   )
