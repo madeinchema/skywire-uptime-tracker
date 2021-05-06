@@ -29,13 +29,10 @@ const VisorsTable = ({ dataSource }: VisorsTableProps): JSX.Element => {
   return (
     <Container px={2} maxW="container.xl">
       <Box overflowX="auto" width="100%">
-        <Table
-          size={dataSource && areVisorsWithLabel(dataSource) ? 'md' : 'sm'}
-          variant="custom"
-        >
+        <Table size="sm" variant="custom">
           <Thead>
             <Tr>
-              <Th width="80px">Online</Th>
+              <Th>Online</Th>
               {dataSource && areVisorsWithLabel(dataSource) && <Th>Label</Th>}
               <Th>Key</Th>
               <Th isNumeric>Percentage</Th>
@@ -67,7 +64,9 @@ const VisorsTable = ({ dataSource }: VisorsTableProps): JSX.Element => {
                       />
                     </Td>
                     {isVisorWithLabel(visor) && <Td>{visor.label}</Td>}
-                    <Td>{visor.key}</Td>
+                    <Td wordBreak="break-all" minW="320px">
+                      {visor.key}
+                    </Td>
                     <Td isNumeric>{formattedVisorData.percentage}</Td>
                     <Td isNumeric>{formattedVisorData.uptime}</Td>
                     <Td isNumeric>{formattedVisorData.downtime}</Td>
