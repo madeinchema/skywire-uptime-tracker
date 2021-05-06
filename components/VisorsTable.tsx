@@ -8,22 +8,37 @@ import {
   Box,
   Container,
 } from '@chakra-ui/react'
-import useVisorsUptimeList from '../../hooks/useVisorsUptimeList'
 import {
   formatPercentage,
   formatSecsToDays,
-} from '../../utils/functions/dataFormatter'
+} from '../utils/functions/dataFormatter'
+import { VisorUptime, MyVisorUptime } from '../interfaces'
 
-const VisorsUptimeTable = (): JSX.Element => {
-  const { visorsUptimeList } = useVisorsUptimeList()
+type VisorFromDataSource = VisorUptime | MyVisorUptime
+type DataSource = VisorUptime[] | MyVisorUptime[]
+
+interface VisorsUptimeTableProps {
+  dataSource: DataSource | undefined
+}
+
+const VisorsUptimeTable = ({
+  dataSource,
+}: VisorsUptimeTableProps): JSX.Element => {
+  const areVisorsWithLabel = (
+    dataToCheck: DataSource
+  ): dataToCheck is DataSource => dataToCheck.some((visor) => 'label' in visor)
 
   return (
-    <Container px={2} maxW="container.lg">
+    <Container px={2} maxW="container.xl">
       <Box overflowX="auto" width="100%">
-        <Table size="sm" variant="custom">
+        <Table
+          size={dataSource && areVisorsWithLabel(dataSource) ? 'md' : 'sm'}
+          variant="custom"
+        >
           <Thead>
             <Tr>
               <Th width="80px">Online</Th>
+              {dataSource && areVisorsWithLabel(dataSource) && <Th>Label</Th>}
               <Th>Key</Th>
               <Th isNumeric>Percentage</Th>
               <Th isNumeric>Uptime</Th>
@@ -31,8 +46,12 @@ const VisorsUptimeTable = (): JSX.Element => {
             </Tr>
           </Thead>
           <Tbody>
-            {visorsUptimeList &&
-              visorsUptimeList.map((visor) => {
+            {dataSource &&
+              dataSource.map((visor: VisorFromDataSource) => {
+                // TODO: Can this check be done at the dataSource level?
+                const isVisorWithLabel = (
+                  visorToCheck: VisorFromDataSource
+                ): visorToCheck is MyVisorUptime => 'label' in visorToCheck
                 const formattedVisorData = {
                   uptime: formatSecsToDays(visor.uptime),
                   downtime: formatSecsToDays(visor.downtime),
@@ -49,6 +68,7 @@ const VisorsUptimeTable = (): JSX.Element => {
                         bgColor={visor.online ? 'green' : 'red'}
                       />
                     </Td>
+                    {isVisorWithLabel(visor) && <Td>{visor.label}</Td>}
                     <Td>{visor.key}</Td>
                     <Td isNumeric>{formattedVisorData.percentage}</Td>
                     <Td isNumeric>{formattedVisorData.uptime}</Td>
