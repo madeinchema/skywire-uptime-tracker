@@ -43,7 +43,7 @@ const DeleteVisorTableCell = ({
 
   return (
     <Td>
-      <Popover initialFocusRef={popoverFocusRef}>
+      <Popover initialFocusRef={popoverFocusRef} strategy="fixed">
         <PopoverTrigger>
           <IconButton
             aria-label="Remove visor"
