@@ -14,12 +14,9 @@ const IndexPage = (): JSX.Element => {
           </Heading>
           <AddVisor />
         </VStack>
-        <VStack spacing={4} w="100%">
-          <Heading as="h1" size="lg">
-            Your Visors
-          </Heading>
-          <MyVisors />
-        </VStack>
+
+        <MyVisors />
+
         <Heading as="h1" size="lg">
           Visors List
         </Heading>

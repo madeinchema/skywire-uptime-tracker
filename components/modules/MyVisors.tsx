@@ -1,7 +1,7 @@
-import { Grid } from '@chakra-ui/layout'
+import { Heading, VStack } from '@chakra-ui/layout'
 import React from 'react'
 import useMyVisors from '../../hooks/useMyVisors'
-import VisorCard from '../VisorCard'
+import VisorsUptimeTable from '../VisorsTable'
 
 const MyVisors = (): JSX.Element => {
   const {
@@ -10,24 +10,12 @@ const MyVisors = (): JSX.Element => {
   } = useMyVisors()
 
   return (
-    <Grid
-      templateColumns={{
-        base: '1fr',
-        md: '1fr 1fr',
-        xl: 'repeat(3, 1fr)',
-      }}
-      gap={5}
-      px={2}
-    >
-      {myVisors &&
-        myVisors.map((visor) => (
-          <VisorCard
-            key={visor.key}
-            visor={visor}
-            onLabelSubmit={updateVisorLabel}
-          />
-        ))}
-    </Grid>
+    <VStack spacing={4} w="100%">
+      <Heading as="h1" size="lg">
+        Your Visors
+      </Heading>
+      <VisorsUptimeTable dataSource={myVisors} />
+    </VStack>
   )
 }
 
