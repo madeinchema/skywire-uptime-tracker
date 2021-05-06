@@ -11,6 +11,7 @@ import {
   EditablePreview,
   EditableInput,
   IconButton,
+  useToast,
 } from '@chakra-ui/react'
 import { MdClose } from 'react-icons/md'
 import { useDispatch } from 'react-redux'
@@ -37,9 +38,16 @@ const VisorsTable = ({
     dataToCheck: DataSource
   ): dataToCheck is DataSource => dataToCheck.some((visor) => 'label' in visor)
   const dispatch = useDispatch()
+  const toast = useToast()
 
   const handleVisorRemoval = (key: VisorKey): void => {
     dispatch(removeVisor({ key }))
+    toast({
+      title: 'The visor has been removed.',
+      status: 'success',
+      duration: 3000,
+      isClosable: true,
+    })
   }
 
   return (
