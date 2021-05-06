@@ -10,28 +10,13 @@ import {
   Editable,
   EditablePreview,
   EditableInput,
-  IconButton,
-  useToast,
-  Popover,
-  PopoverTrigger,
-  Portal,
-  PopoverContent,
-  PopoverArrow,
-  PopoverHeader,
-  PopoverCloseButton,
-  PopoverBody,
-  Button,
-  Text,
-  useColorMode,
 } from '@chakra-ui/react'
-import { MdClose } from 'react-icons/md'
-import { useDispatch } from 'react-redux'
 import {
   formatPercentage,
   formatSecsToDays,
 } from '../utils/functions/dataFormatter'
 import { VisorUptime, MyVisorUptime, VisorKey, VisorLabel } from '../interfaces'
-import { removeVisor } from '../state/slices/myVisorsSlice'
+import DeleteVisorTableCell from './modules/MyVisors/components/DeleteVisorTableCell'
 
 type VisorFromDataSource = VisorUptime | MyVisorUptime
 type DataSource = VisorUptime[] | MyVisorUptime[]
@@ -48,19 +33,6 @@ const VisorsTable = ({
   const areVisorsWithLabel = (
     dataToCheck: DataSource
   ): dataToCheck is DataSource => dataToCheck.some((visor) => 'label' in visor)
-  const dispatch = useDispatch()
-  const toast = useToast()
-  const { colorMode } = useColorMode()
-
-  const handleVisorRemoval = (key: VisorKey): void => {
-    dispatch(removeVisor({ key }))
-    toast({
-      title: 'The visor has been removed.',
-      status: 'success',
-      duration: 3000,
-      isClosable: true,
-    })
-  }
 
   return (
     <Container px={2} maxW="container.xl">
@@ -122,54 +94,7 @@ const VisorsTable = ({
                     <Td isNumeric>{formattedVisorData.uptime}</Td>
                     <Td isNumeric>{formattedVisorData.downtime}</Td>
                     {isMyVisor(visor) && (
-                      <Td>
-                        <Popover>
-                          <PopoverTrigger>
-                            <IconButton
-                              aria-label="Remove visor"
-                              size="xs"
-                              colorScheme="red"
-                              isRound
-                              opacity={0.5}
-                              _hover={{ opacity: 1 }}
-                              icon={
-                                <MdClose
-                                  style={{
-                                    strokeWidth: 3,
-                                    stroke:
-                                      colorMode === 'light'
-                                        ? 'white'
-                                        : '#171923',
-                                  }}
-                                />
-                              }
-                            />
-                          </PopoverTrigger>
-                          <Portal>
-                            <PopoverContent>
-                              <PopoverArrow />
-                              <PopoverHeader fontWeight={700}>
-                                Remove visor
-                              </PopoverHeader>
-                              <PopoverCloseButton mt={1} />
-                              <PopoverBody>
-                                <Text mb={3}>
-                                  Are you sure? You can&apos;t undo this action
-                                  afterwards
-                                </Text>
-                                <Button
-                                  colorScheme="red"
-                                  size="sm"
-                                  onClick={() => handleVisorRemoval(visor.key)}
-                                  mb={1}
-                                >
-                                  Remove
-                                </Button>
-                              </PopoverBody>
-                            </PopoverContent>
-                          </Portal>
-                        </Popover>
-                      </Td>
+                      <DeleteVisorTableCell visorKey={visor.key} />
                     )}
                   </Tr>
                 )
