@@ -19,7 +19,10 @@ const AddVisor = (): JSX.Element => {
     visorData,
     handlers: { checkVisorStatus, addNewVisor },
   } = useVisorData()
-  const [inputValues, setInputValues] = useState<MyVisor>({ key: '' })
+  const [inputValues, setInputValues] = useState<MyVisor>({
+    key: '',
+    label: 'Visor',
+  })
 
   const handleKeyInput = (e: React.ChangeEvent<HTMLInputElement>): void =>
     setInputValues((prevState) => ({
@@ -27,7 +30,7 @@ const AddVisor = (): JSX.Element => {
       key: e.target.value,
     }))
 
-  const onLabelSubmit = (key: VisorKey, label: string | undefined): void => {
+  const onLabelSubmit = (key: VisorKey, label: string): void => {
     setInputValues({ key, label })
   }
 
@@ -79,6 +82,7 @@ const AddVisor = (): JSX.Element => {
                   downtime: visorData.data.downtime,
                   percentage: visorData.data.percentage,
                   online: visorData.data.online,
+                  label: inputValues.label,
                 }}
                 onLabelSubmit={onLabelSubmit}
               />
