@@ -22,6 +22,7 @@ import {
   PopoverBody,
   Button,
   Text,
+  useColorMode,
 } from '@chakra-ui/react'
 import { MdClose } from 'react-icons/md'
 import { useDispatch } from 'react-redux'
@@ -49,6 +50,7 @@ const VisorsTable = ({
   ): dataToCheck is DataSource => dataToCheck.some((visor) => 'label' in visor)
   const dispatch = useDispatch()
   const toast = useToast()
+  const { colorMode } = useColorMode()
 
   const handleVisorRemoval = (key: VisorKey): void => {
     dispatch(removeVisor({ key }))
@@ -132,7 +134,13 @@ const VisorsTable = ({
                               _hover={{ opacity: 1 }}
                               icon={
                                 <MdClose
-                                  style={{ strokeWidth: 3, stroke: 'white' }}
+                                  style={{
+                                    strokeWidth: 3,
+                                    stroke:
+                                      colorMode === 'light'
+                                        ? 'white'
+                                        : '#171923',
+                                  }}
                                 />
                               }
                             />
