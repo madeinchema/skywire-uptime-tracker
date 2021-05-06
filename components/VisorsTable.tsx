@@ -40,7 +40,7 @@ const VisorsTable = ({
           <Thead>
             <Tr>
               <Th>Online</Th>
-              {dataSource && areVisorsWithLabel(dataSource) && <Th>Label</Th>}
+              {dataSource && areVisorsWithLabel(dataSource) && <Th>Label ▴</Th>}
               <Th>Key</Th>
               <Th isNumeric>Percentage</Th>
               <Th isNumeric>Uptime</Th>
