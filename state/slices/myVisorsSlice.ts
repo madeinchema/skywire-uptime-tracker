@@ -39,8 +39,8 @@ export const myVisorsSlice = createSlice({
     },
     addNewVisor: (state, action: AddNewVisorAction) => {
       const newVisor = {
-        ...action.payload,
         label: action.payload.label || 'Visor',
+        ...action.payload,
       }
       state.visors = [...state.visors, newVisor]
     },
