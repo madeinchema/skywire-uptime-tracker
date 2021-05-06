@@ -12,6 +12,16 @@ import {
   EditableInput,
   IconButton,
   useToast,
+  Popover,
+  PopoverTrigger,
+  Portal,
+  PopoverContent,
+  PopoverArrow,
+  PopoverHeader,
+  PopoverCloseButton,
+  PopoverBody,
+  Button,
+  Text,
 } from '@chakra-ui/react'
 import { MdClose } from 'react-icons/md'
 import { useDispatch } from 'react-redux'
@@ -111,20 +121,46 @@ const VisorsTable = ({
                     <Td isNumeric>{formattedVisorData.downtime}</Td>
                     {isMyVisor(visor) && (
                       <Td>
-                        <IconButton
-                          aria-label="Remove visor"
-                          size="xs"
-                          onClick={() => handleVisorRemoval(visor.key)}
-                          colorScheme="red"
-                          isRound
-                          opacity={0.5}
-                          _hover={{ opacity: 1 }}
-                          icon={
-                            <MdClose
-                              style={{ strokeWidth: 3, stroke: 'white' }}
+                        <Popover>
+                          <PopoverTrigger>
+                            <IconButton
+                              aria-label="Remove visor"
+                              size="xs"
+                              colorScheme="red"
+                              isRound
+                              opacity={0.5}
+                              _hover={{ opacity: 1 }}
+                              icon={
+                                <MdClose
+                                  style={{ strokeWidth: 3, stroke: 'white' }}
+                                />
+                              }
                             />
-                          }
-                        />
+                          </PopoverTrigger>
+                          <Portal>
+                            <PopoverContent>
+                              <PopoverArrow />
+                              <PopoverHeader fontWeight={700}>
+                                Remove visor
+                              </PopoverHeader>
+                              <PopoverCloseButton mt={1} />
+                              <PopoverBody>
+                                <Text mb={3}>
+                                  Are you sure? You can&apos;t undo this action
+                                  afterwards
+                                </Text>
+                                <Button
+                                  colorScheme="red"
+                                  size="sm"
+                                  onClick={() => handleVisorRemoval(visor.key)}
+                                  mb={1}
+                                >
+                                  Remove
+                                </Button>
+                              </PopoverBody>
+                            </PopoverContent>
+                          </Portal>
+                        </Popover>
                       </Td>
                     )}
                   </Tr>
