@@ -11,7 +11,7 @@ interface UseVisorsUptimeList {
   }
 }
 
-const useVisorsUptimeList = (): UseVisorsUptimeList => {
+function useVisorsUptimeList(): UseVisorsUptimeList {
   const [visorsUptimeList, setVisorsUptimeList] = useState<
     VisorUptime[] | undefined
   >(undefined)

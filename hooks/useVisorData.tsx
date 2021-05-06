@@ -19,7 +19,7 @@ interface UseVisorData {
   }
 }
 
-const useVisorData = (): UseVisorData => {
+function useVisorData(): UseVisorData {
   const [visorData, setVisorData] = useState<VisorData>({
     data: undefined,
     loading: false,

@@ -14,13 +14,13 @@ import {
 import { getMyVisorsList } from '../utils/functions/getVisorsList'
 
 interface UseMyVisors {
-  myVisors: VisorUptime[] | undefined
+  myVisors: MyVisorUptime[] | undefined
   handlers: {
     updateVisorLabel: (key: VisorKey, label: VisorLabel) => void
   }
 }
 
-const useMyVisors = (): UseMyVisors => {
+function useMyVisors(): UseMyVisors {
   const [myVisors, setMyVisors] = useState<MyVisorUptime[] | undefined>(
     undefined
   )
