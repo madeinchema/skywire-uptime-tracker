@@ -1,7 +1,14 @@
 import { useCallback, useState } from 'react'
 import { Button } from '@chakra-ui/button'
 import { Input } from '@chakra-ui/input'
-import { Container, Flex, HStack, Text, VStack } from '@chakra-ui/layout'
+import {
+  Container,
+  Flex,
+  Heading,
+  HStack,
+  Text,
+  VStack,
+} from '@chakra-ui/layout'
 import useVisorData from '../../hooks/useVisorData'
 import { MyVisor, VisorKey } from '../../interfaces'
 
@@ -33,47 +40,53 @@ const AddVisor = (): JSX.Element => {
   }, [addNewVisor, inputValues])
 
   return (
-    <Container px={2} maxW="container.sm">
-      <Flex direction="column">
-        <VStack mb={5}>
-          <Flex direction="column" w="100%">
-            <Text>Public key</Text>
-            <Input
-              name="key"
-              value={inputValues?.key}
-              onChange={handleKeyInput}
-            />
+    <VStack spacing={4} w="100%">
+      <Heading as="h1" size="lg">
+        Add your visors
+      </Heading>
+
+      <Container px={2} maxW="container.sm">
+        <Flex direction="column">
+          <VStack mb={5}>
+            <Flex direction="column" w="100%">
+              <Text>Public key</Text>
+              <Input
+                name="key"
+                value={inputValues?.key}
+                onChange={handleKeyInput}
+              />
+            </Flex>
+            <HStack direction="column" w="100%">
+              <Button
+                w="100%"
+                variant="outline"
+                colorScheme="blue"
+                onClick={onClickCheckStatus}
+              >
+                Check status
+              </Button>
+              <Button w="100%" colorScheme="blue" onClick={onClickAddVisor}>
+                Add visor
+              </Button>
+            </HStack>
+          </VStack>
+          <Flex width="100%" justify="center">
+            {visorData?.data && (
+              <VisorCard
+                visor={{
+                  key: visorData.data.key,
+                  uptime: visorData.data.uptime,
+                  downtime: visorData.data.downtime,
+                  percentage: visorData.data.percentage,
+                  online: visorData.data.online,
+                }}
+                onLabelSubmit={onLabelSubmit}
+              />
+            )}
           </Flex>
-          <HStack direction="column" w="100%">
-            <Button
-              w="100%"
-              variant="outline"
-              colorScheme="blue"
-              onClick={onClickCheckStatus}
-            >
-              Check status
-            </Button>
-            <Button w="100%" colorScheme="blue" onClick={onClickAddVisor}>
-              Add visor
-            </Button>
-          </HStack>
-        </VStack>
-        <Flex width="100%" justify="center">
-          {visorData?.data && (
-            <VisorCard
-              visor={{
-                key: visorData.data.key,
-                uptime: visorData.data.uptime,
-                downtime: visorData.data.downtime,
-                percentage: visorData.data.percentage,
-                online: visorData.data.online,
-              }}
-              onLabelSubmit={onLabelSubmit}
-            />
-          )}
         </Flex>
-      </Flex>
-    </Container>
+      </Container>
+    </VStack>
   )
 }
 

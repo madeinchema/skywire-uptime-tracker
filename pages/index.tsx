@@ -1,4 +1,4 @@
-import { Heading, VStack } from '@chakra-ui/react'
+import { VStack } from '@chakra-ui/react'
 
 import Layout from '../components/layout/Layout'
 import AddVisor from '../components/modules/AddVisor'
@@ -9,13 +9,7 @@ const IndexPage = (): JSX.Element => {
   return (
     <Layout>
       <VStack spacing={8}>
-        <VStack spacing={4} w="100%">
-          <Heading as="h1" size="lg">
-            Add your visors
-          </Heading>
-          <AddVisor />
-        </VStack>
-
+        <AddVisor />
         <MyVisors />
         <VisorsList />
       </VStack>
