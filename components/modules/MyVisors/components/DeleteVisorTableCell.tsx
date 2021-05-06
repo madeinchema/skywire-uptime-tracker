@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import { Button, IconButton } from '@chakra-ui/button'
 import { useColorMode } from '@chakra-ui/color-mode'
 import { Text } from '@chakra-ui/layout'
@@ -13,7 +14,6 @@ import {
 import { Portal } from '@chakra-ui/portal'
 import { Td } from '@chakra-ui/table'
 import { useToast } from '@chakra-ui/toast'
-import React from 'react'
 import { MdClose } from 'react-icons/md'
 import { useDispatch } from 'react-redux'
 import { VisorKey } from '../../../../interfaces'
@@ -26,6 +26,7 @@ interface DeleteVisorTableCellProps {
 const DeleteVisorTableCell = ({
   visorKey,
 }: DeleteVisorTableCellProps): JSX.Element => {
+  const popoverFocusRef = useRef<HTMLButtonElement>(null)
   const dispatch = useDispatch()
   const toast = useToast()
   const { colorMode } = useColorMode()
@@ -42,7 +43,7 @@ const DeleteVisorTableCell = ({
 
   return (
     <Td>
-      <Popover>
+      <Popover initialFocusRef={popoverFocusRef}>
         <PopoverTrigger>
           <IconButton
             aria-label="Remove visor"
@@ -75,6 +76,7 @@ const DeleteVisorTableCell = ({
                 size="sm"
                 onClick={handleVisorRemoval}
                 mb={1}
+                ref={popoverFocusRef}
               >
                 Remove
               </Button>
