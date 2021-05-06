@@ -7,21 +7,28 @@ import {
   Td,
   Box,
   Container,
+  Editable,
+  EditablePreview,
+  EditableInput,
 } from '@chakra-ui/react'
 import {
   formatPercentage,
   formatSecsToDays,
 } from '../utils/functions/dataFormatter'
-import { VisorUptime, MyVisorUptime } from '../interfaces'
+import { VisorUptime, MyVisorUptime, VisorKey, VisorLabel } from '../interfaces'
 
 type VisorFromDataSource = VisorUptime | MyVisorUptime
 type DataSource = VisorUptime[] | MyVisorUptime[]
 
 interface VisorsTableProps {
   dataSource: DataSource | undefined
+  onLabelSubmit?: (key: VisorKey, label: VisorLabel) => void
 }
 
-const VisorsTable = ({ dataSource }: VisorsTableProps): JSX.Element => {
+const VisorsTable = ({
+  dataSource,
+  onLabelSubmit,
+}: VisorsTableProps): JSX.Element => {
   const areVisorsWithLabel = (
     dataToCheck: DataSource
   ): dataToCheck is DataSource => dataToCheck.some((visor) => 'label' in visor)
@@ -63,7 +70,18 @@ const VisorsTable = ({ dataSource }: VisorsTableProps): JSX.Element => {
                         bgColor={visor.online ? 'green' : 'red'}
                       />
                     </Td>
-                    {isVisorWithLabel(visor) && <Td>{visor.label}</Td>}
+                    {isVisorWithLabel(visor) && (
+                      <Editable
+                        fontWeight="700"
+                        defaultValue={visor.label}
+                        onSubmit={(value) =>
+                          onLabelSubmit && onLabelSubmit(visor.key, value)
+                        }
+                      >
+                        <EditablePreview />
+                        <EditableInput />
+                      </Editable>
+                    )}
                     <Td wordBreak="break-all" minW="320px">
                       {visor.key}
                     </Td>

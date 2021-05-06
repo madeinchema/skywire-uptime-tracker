@@ -14,7 +14,7 @@ const MyVisors = (): JSX.Element => {
       <Heading as="h1" size="lg">
         Your Visors
       </Heading>
-      <VisorsTable dataSource={myVisors} />
+      <VisorsTable dataSource={myVisors} onLabelSubmit={updateVisorLabel} />
     </VStack>
   )
 }
