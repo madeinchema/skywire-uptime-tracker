@@ -51,20 +51,22 @@ function useMyVisors(): UseMyVisors {
     const visorKeysToMatch = myVisorsSelector.map(
       (myVisor: MyVisor) => myVisor.key
     )
-    const visorUptimesThatMatch = visorsUptimeListSelector.filter(
+    const matchingVisors = visorsUptimeListSelector.filter(
       (visor: VisorUptime) => visorKeysToMatch.includes(visor.key)
     )
-    const myVisorsUptimesWithLabels = visorUptimesThatMatch.map(
+    const myVisorsUptimesWithLabels = matchingVisors.map(
       (visor: VisorUptime) => {
         const myVisorToUpdate = myVisorsSelector.find(
           (myVisor: MyVisor) => myVisor.key === visor.key
         )
-        return { ...visor, label: myVisorToUpdate.label }
+        return myVisorToUpdate && { ...visor, label: myVisorToUpdate.label }
       }
     )
     const sortedVisors = myVisorsUptimesWithLabels.sort(
-      (a: MyVisorUptime, b: MyVisorUptime) => a.label.localeCompare(b.label)
+      (a: MyVisorUptime, b: MyVisorUptime) =>
+        a.label.localeCompare(b.label, 'en', { numeric: true })
     )
+
     setMyVisors(sortedVisors)
   }, [myVisorsSelector, visorsUptimeListSelector])
 
