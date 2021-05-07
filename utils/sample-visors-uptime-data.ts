@@ -1,10 +1,10 @@
 export default [
   {
     key: '020011587bf42a45b15f40d6783f5e5320a69a97a7298382103b754f2e3b6b63e9',
-    uptime: 156291,
-    downtime: 2522109,
-    percentage: 5.835237455197133,
-    online: true,
+    uptime: 574251,
+    downtime: 2104149,
+    percentage: 21.44007616487455,
+    online: false,
   },
   {
     key: '02001728a88c27b6fa73ebc969dccdbcbd1d4393f267ea10fff2ed8d5eccaca0a4',
@@ -90,4 +90,4 @@ export default [
     percentage: 5.835237455197133,
     online: true,
   },
-];
+]
