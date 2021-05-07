@@ -14,9 +14,11 @@ import {
 import {
   formatPercentage,
   formatSecsToDays,
+  getHealthPercentage,
 } from '../utils/functions/dataFormatter'
 import { VisorUptime, MyVisorUptime, VisorKey, VisorLabel } from '../interfaces'
 import DeleteVisorTableCell from './modules/MyVisors/components/DeleteVisorTableCell'
+import { getSecsElapsedThisMonth } from '../utils/functions/getTimeRelatedData'
 
 type VisorFromDataSource = VisorUptime | MyVisorUptime
 type DataSource = VisorUptime[] | MyVisorUptime[]
@@ -34,6 +36,8 @@ const VisorsTable = ({
     dataToCheck: DataSource
   ): dataToCheck is DataSource => dataToCheck.some((visor) => 'label' in visor)
 
+  const totalSecondsElapsedThisMonth = getSecsElapsedThisMonth()
+
   return (
     <Container px={2} maxW="container.xl">
       <Box overflowX="auto" width="100%">
@@ -46,6 +50,7 @@ const VisorsTable = ({
               <Th isNumeric>Percentage</Th>
               <Th isNumeric>Uptime</Th>
               <Th isNumeric>Downtime</Th>
+              <Th isNumeric>Health</Th>
               {dataSource && areVisorsWithLabel(dataSource) && <Th />}
             </Tr>
           </Thead>
@@ -60,6 +65,10 @@ const VisorsTable = ({
                   uptime: formatSecsToDays(visor.uptime),
                   downtime: formatSecsToDays(visor.downtime),
                   percentage: formatPercentage(visor.percentage),
+                  health: getHealthPercentage(
+                    visor.uptime,
+                    totalSecondsElapsedThisMonth
+                  ),
                 }
 
                 return (
@@ -93,6 +102,7 @@ const VisorsTable = ({
                     <Td isNumeric>{formattedVisorData.percentage}</Td>
                     <Td isNumeric>{formattedVisorData.uptime}</Td>
                     <Td isNumeric>{formattedVisorData.downtime}</Td>
+                    <Td isNumeric>{formattedVisorData.health}</Td>
                     {isMyVisor(visor) && (
                       <DeleteVisorTableCell visorKey={visor.key} />
                     )}
