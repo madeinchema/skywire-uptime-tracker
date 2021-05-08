@@ -84,6 +84,19 @@ function useMyVisors(): UseMyVisors {
   }, [myVisorsSelector, visorsUptimeListSelector])
 
   /**
+   * Handle loading based off VisorsUptimeList
+   */
+  useEffect(() => {
+    const isVisorsUptimeListLoaded = visorsUptimeListSelector.length > 0
+    if (isVisorsUptimeListLoaded) {
+      setMyVisors((prevState) => ({
+        ...prevState,
+        isLoading: false,
+      }))
+    }
+  }, [visorsUptimeListSelector.length])
+
+  /**
    * Utility functions
    */
 

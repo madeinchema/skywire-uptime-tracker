@@ -1,11 +1,12 @@
 import { Heading, VStack } from '@chakra-ui/layout'
+import { Spinner } from '@chakra-ui/spinner'
 import React from 'react'
 import useMyVisors from '../../../hooks/useMyVisors'
 import VisorsTable from '../../VisorsTable'
 
 const MyVisors = (): JSX.Element => {
   const {
-    myVisors,
+    myVisors: { data, isLoading },
     handlers: { updateVisorLabel },
   } = useMyVisors()
 
@@ -14,7 +15,11 @@ const MyVisors = (): JSX.Element => {
       <Heading as="h1" size="lg">
         Your Visors
       </Heading>
-      <VisorsTable dataSource={myVisors} onLabelSubmit={updateVisorLabel} />
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <VisorsTable dataSource={data} onLabelSubmit={updateVisorLabel} />
+      )}
     </VStack>
   )
 }
