@@ -34,7 +34,8 @@ function useVisorsUptimeList(): UseVisorsUptimeList {
    * Get Visors List
    */
   useEffect(() => {
-    if (visorsUptimeListSelector.length < 1) {
+    const shouldGetVisors = visorsUptimeListSelector.length < 1
+    if (shouldGetVisors) {
       // TODO: Remember to remove this setTimeout later
       setTimeout(() => {
         getVisorsList('USE_FAKE_DATA').then((data) =>
@@ -48,7 +49,8 @@ function useVisorsUptimeList(): UseVisorsUptimeList {
    * Set Visors List
    */
   useEffect(() => {
-    if (visorsUptimeListSelector.length > 0) {
+    const shouldSetVisors = visorsUptimeListSelector.length > 0
+    if (shouldSetVisors) {
       setVisorsUptimeList((prevState) => ({
         ...prevState,
         data: visorsUptimeListSelector,
