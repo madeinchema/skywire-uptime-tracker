@@ -1,9 +1,12 @@
+import { MyVisor, VisorUptime } from '../../interfaces'
 import sampleMyVisorsData from '../sample-my-visors-data'
 import sampleVisorsUptimeData from '../sample-visors-uptime-data'
 
 type UseFakeData = 'USE_FAKE_DATA' | undefined
 
-const getVisorsList = async (useFakeData: UseFakeData): Promise<any> => {
+const getVisorsList = async (
+  useFakeData: UseFakeData
+): Promise<VisorUptime[]> => {
   if (useFakeData === 'USE_FAKE_DATA') {
     return new Promise((res) => {
       res(sampleVisorsUptimeData)
@@ -15,7 +18,9 @@ const getVisorsList = async (useFakeData: UseFakeData): Promise<any> => {
   return visorsList
 }
 
-const getMyVisorsList = async (useFakeData: UseFakeData): Promise<any> => {
+const getMyVisorsList = async (
+  useFakeData: UseFakeData
+): Promise<MyVisor[]> => {
   if (useFakeData === 'USE_FAKE_DATA') {
     return new Promise((res) => {
       res(sampleMyVisorsData)
