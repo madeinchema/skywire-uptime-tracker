@@ -4,22 +4,35 @@ import { VisorUptime } from '../interfaces'
 import { saveVisorsUptimeData } from '../state/slices/visorsUptimeSlice'
 import { getVisorsList } from '../utils/functions/getVisorsList'
 
+interface VisorsUptimeList {
+  data: VisorUptime[] | undefined
+  isLoading: boolean
+  isHidden: boolean
+  error: Error | undefined
+}
+
 interface UseVisorsUptimeList {
-  visorsUptimeList: VisorUptime[] | undefined
+  visorsUptimeList: VisorsUptimeList
   handlers: {
     handleVisorsUptimeList: () => void
   }
 }
 
 function useVisorsUptimeList(): UseVisorsUptimeList {
-  const [visorsUptimeList, setVisorsUptimeList] = useState<
-    VisorUptime[] | undefined
-  >(undefined)
+  const [visorsUptimeList, setVisorsUptimeList] = useState<VisorsUptimeList>({
+    data: undefined,
+    isLoading: true,
+    isHidden: true,
+    error: undefined,
+  })
   const visorsUptimeListSelector = useSelector(
     (state: RootStateOrAny) => state.visorsUptime.visors
   )
   const dispatch = useDispatch()
 
+  /**
+   * Get Visors List
+   */
   useEffect(() => {
     if (visorsUptimeListSelector.length < 1) {
       getVisorsList('USE_FAKE_DATA').then((data) =>
@@ -28,10 +41,20 @@ function useVisorsUptimeList(): UseVisorsUptimeList {
     }
   }, [dispatch, visorsUptimeListSelector.length])
 
+  /**
+   * Set Visors List
+   */
   useEffect(() => {
-    setVisorsUptimeList(visorsUptimeListSelector)
+    setVisorsUptimeList((prevState) => ({
+      ...prevState,
+      data: visorsUptimeListSelector,
+      isLoading: false,
+    }))
   }, [visorsUptimeListSelector])
 
+  /**
+   * Handlers
+   */
   const handlers = React.useMemo(
     () => ({
       handleVisorsUptimeList: () => console.log('handleVisorsUptimeList'),
