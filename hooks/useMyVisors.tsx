@@ -14,8 +14,14 @@ import {
 } from '../state/slices/myVisorsSlice'
 import { getMyVisorsList } from '../utils/functions/getVisorsList'
 
+interface MyVisors {
+  data: MyVisorUptime[] | undefined
+  isLoading: boolean
+  error: Error | undefined
+}
+
 interface UseMyVisors {
-  myVisors: MyVisorUptime[] | undefined
+  myVisors: MyVisors
   handlers: {
     updateVisorLabel: (key: VisorKey, label: VisorLabel) => void
     removeVisor: (key: VisorKey) => void
@@ -23,9 +29,11 @@ interface UseMyVisors {
 }
 
 function useMyVisors(): UseMyVisors {
-  const [myVisors, setMyVisors] = useState<MyVisorUptime[] | undefined>(
-    undefined
-  )
+  const [myVisors, setMyVisors] = useState<MyVisors>({
+    data: undefined,
+    isLoading: true,
+    error: undefined,
+  })
   const myVisorsSelector: MyVisor[] = useSelector(
     (state: RootStateOrAny) => state.myVisors.visors
   )
@@ -69,8 +77,24 @@ function useMyVisors(): UseMyVisors {
         a.label.localeCompare(b.label, 'en', { numeric: true })
     )
 
-    setMyVisors(sortedVisors)
+    setMyVisors((prevState) => ({
+      ...prevState,
+      data: sortedVisors,
+    }))
   }, [myVisorsSelector, visorsUptimeListSelector])
+
+  /**
+   * Handle loading based off VisorsUptimeList
+   */
+  useEffect(() => {
+    const isVisorsUptimeListLoaded = visorsUptimeListSelector.length > 0
+    if (isVisorsUptimeListLoaded) {
+      setMyVisors((prevState) => ({
+        ...prevState,
+        isLoading: false,
+      }))
+    }
+  }, [visorsUptimeListSelector.length])
 
   /**
    * Utility functions

@@ -4,37 +4,71 @@ import { VisorUptime } from '../interfaces'
 import { saveVisorsUptimeData } from '../state/slices/visorsUptimeSlice'
 import { getVisorsList } from '../utils/functions/getVisorsList'
 
+interface VisorsUptimeList {
+  data: VisorUptime[] | undefined
+  isLoading: boolean
+  isHidden: boolean
+  error: Error | undefined
+}
+
 interface UseVisorsUptimeList {
-  visorsUptimeList: VisorUptime[] | undefined
+  visorsUptimeList: VisorsUptimeList
   handlers: {
-    handleVisorsUptimeList: () => void
+    toggleShowVisorsUptimeList: () => void
   }
 }
 
 function useVisorsUptimeList(): UseVisorsUptimeList {
-  const [visorsUptimeList, setVisorsUptimeList] = useState<
-    VisorUptime[] | undefined
-  >(undefined)
+  const [visorsUptimeList, setVisorsUptimeList] = useState<VisorsUptimeList>({
+    data: undefined,
+    isLoading: true,
+    isHidden: true,
+    error: undefined,
+  })
   const visorsUptimeListSelector = useSelector(
     (state: RootStateOrAny) => state.visorsUptime.visors
   )
   const dispatch = useDispatch()
 
+  /**
+   * Get Visors List
+   */
   useEffect(() => {
-    if (visorsUptimeListSelector.length < 1) {
-      getVisorsList('USE_FAKE_DATA').then((data) =>
-        dispatch(saveVisorsUptimeData(data))
-      )
+    const shouldGetVisors = visorsUptimeListSelector.length < 1
+    if (shouldGetVisors) {
+      // TODO: Remember to remove this setTimeout later
+      setTimeout(() => {
+        getVisorsList('USE_FAKE_DATA').then((data) =>
+          dispatch(saveVisorsUptimeData(data))
+        )
+      }, 1000)
     }
   }, [dispatch, visorsUptimeListSelector.length])
 
+  /**
+   * Set Visors List
+   */
   useEffect(() => {
-    setVisorsUptimeList(visorsUptimeListSelector)
+    const shouldSetVisors = visorsUptimeListSelector.length > 0
+    if (shouldSetVisors) {
+      setVisorsUptimeList((prevState) => ({
+        ...prevState,
+        data: visorsUptimeListSelector,
+        isLoading: false,
+      }))
+    }
   }, [visorsUptimeListSelector])
 
+  /**
+   * Handlers
+   */
   const handlers = React.useMemo(
     () => ({
-      handleVisorsUptimeList: () => console.log('handleVisorsUptimeList'),
+      toggleShowVisorsUptimeList: () =>
+        setVisorsUptimeList((prevState) => ({
+          ...prevState,
+          isHidden: !prevState.isHidden,
+        })),
     }),
     []
   )
