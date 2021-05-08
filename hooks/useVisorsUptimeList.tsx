@@ -14,7 +14,7 @@ interface VisorsUptimeList {
 interface UseVisorsUptimeList {
   visorsUptimeList: VisorsUptimeList
   handlers: {
-    handleVisorsUptimeList: () => void
+    toggleShowVisorsUptimeList: () => void
   }
 }
 
@@ -35,9 +35,12 @@ function useVisorsUptimeList(): UseVisorsUptimeList {
    */
   useEffect(() => {
     if (visorsUptimeListSelector.length < 1) {
-      getVisorsList('USE_FAKE_DATA').then((data) =>
-        dispatch(saveVisorsUptimeData(data))
-      )
+      // TODO: Remember to remove this setTimeout later
+      setTimeout(() => {
+        getVisorsList('USE_FAKE_DATA').then((data) =>
+          dispatch(saveVisorsUptimeData(data))
+        )
+      }, 1000)
     }
   }, [dispatch, visorsUptimeListSelector.length])
 
@@ -45,11 +48,13 @@ function useVisorsUptimeList(): UseVisorsUptimeList {
    * Set Visors List
    */
   useEffect(() => {
-    setVisorsUptimeList((prevState) => ({
-      ...prevState,
-      data: visorsUptimeListSelector,
-      isLoading: false,
-    }))
+    if (visorsUptimeListSelector.length > 0) {
+      setVisorsUptimeList((prevState) => ({
+        ...prevState,
+        data: visorsUptimeListSelector,
+        isLoading: false,
+      }))
+    }
   }, [visorsUptimeListSelector])
 
   /**
@@ -57,7 +62,11 @@ function useVisorsUptimeList(): UseVisorsUptimeList {
    */
   const handlers = React.useMemo(
     () => ({
-      handleVisorsUptimeList: () => console.log('handleVisorsUptimeList'),
+      toggleShowVisorsUptimeList: () =>
+        setVisorsUptimeList((prevState) => ({
+          ...prevState,
+          isHidden: !prevState.isHidden,
+        })),
     }),
     []
   )
