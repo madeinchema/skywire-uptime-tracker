@@ -5,11 +5,11 @@ import { Box, Flex, HStack, Text, VStack } from '@chakra-ui/layout'
 import { useToast } from '@chakra-ui/toast'
 import { Tooltip } from '@chakra-ui/tooltip'
 import React, { useMemo } from 'react'
-import { MyVisorUptime, VisorKey, VisorLabel } from '../interfaces'
+import { MyVisorUptime, VisorKey, VisorLabel } from '../../interfaces'
 import {
   formatPercentage,
   formatSecsToDays,
-} from '../utils/functions/dataFormatter'
+} from '../../utils/functions/dataFormatter'
 
 type VisorCardProps = {
   visor: MyVisorUptime
