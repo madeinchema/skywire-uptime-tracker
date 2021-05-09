@@ -1,14 +1,14 @@
 import React from 'react'
 import { Heading, VStack } from '@chakra-ui/layout'
 import { Button } from '@chakra-ui/button'
-import useVisorsUptimeList from '../../hooks/useVisorsUptimeList'
+import useVisorsList from '../../hooks/useVisorsList'
 import VisorsTable from '../VisorsTable'
 
 const VisorsList = (): JSX.Element => {
   const {
-    visorsUptimeList: { data, isLoading, isHidden },
-    handlers: { toggleShowVisorsUptimeList },
-  } = useVisorsUptimeList()
+    visorsList: { data, isLoading, isHidden },
+    handlers: { toggleShowVisorsList },
+  } = useVisorsList()
 
   return (
     <VStack spacing={4} w="100%">
@@ -17,7 +17,7 @@ const VisorsList = (): JSX.Element => {
       </Heading>
       {!isLoading && !isHidden && (
         <>
-          <Button size="sm" onClick={toggleShowVisorsUptimeList}>
+          <Button size="sm" onClick={toggleShowVisorsList}>
             Hide list
           </Button>
           <VisorsTable dataSource={data} />
@@ -27,7 +27,7 @@ const VisorsList = (): JSX.Element => {
         <Button
           isLoading={isLoading}
           colorScheme="blue"
-          onClick={toggleShowVisorsUptimeList}
+          onClick={toggleShowVisorsList}
         >
           Show list
         </Button>
