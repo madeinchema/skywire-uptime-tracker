@@ -4,6 +4,9 @@ import { RootStateOrAny, useDispatch, useSelector } from 'react-redux'
 import { MyVisor, VisorKey, VisorUptime } from '../interfaces'
 import { addNewVisor, updateVisorLabel } from '../state/slices/myVisorsSlice'
 
+/**
+ * Types
+ */
 type VisorData = {
   data: VisorUptime | undefined
   loading: boolean
@@ -11,7 +14,7 @@ type VisorData = {
   error: string | undefined
 }
 
-interface UseVisorData {
+interface UseVisor {
   visorData: VisorData
   handlers: {
     checkVisorStatus: (key: VisorKey) => void
@@ -19,7 +22,10 @@ interface UseVisorData {
   }
 }
 
-function useVisorData(): UseVisorData {
+/**
+ * useVisor hook
+ */
+function useVisor(): UseVisor {
   const [visorData, setVisorData] = useState<VisorData>({
     data: undefined,
     loading: false,
@@ -107,4 +113,4 @@ function useVisorData(): UseVisorData {
   return { visorData, handlers }
 }
 
-export default useVisorData
+export default useVisor

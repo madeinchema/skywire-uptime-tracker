@@ -9,7 +9,7 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/layout'
-import useVisorData from '../../hooks/useVisorData'
+import useVisor from '../../hooks/useVisor'
 import { MyVisor, VisorKey } from '../../interfaces'
 
 import VisorCard from '../VisorCard'
@@ -18,7 +18,7 @@ const AddVisor = (): JSX.Element => {
   const {
     visorData,
     handlers: { checkVisorStatus, addNewVisor },
-  } = useVisorData()
+  } = useVisor()
   const initialInputValuesState = useMemo(
     () => ({ key: '', label: 'Visor' }),
     []
