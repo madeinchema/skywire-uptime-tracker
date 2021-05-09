@@ -1,3 +1,4 @@
+import { useToast } from '@chakra-ui/toast'
 import React, { useState } from 'react'
 import { RootStateOrAny, useDispatch, useSelector } from 'react-redux'
 import { MyVisor, VisorKey, VisorLabel, VisorUptime } from '../interfaces'
@@ -39,6 +40,7 @@ function useVisor(): UseVisor {
     (state: RootStateOrAny) => state.myVisors.visors
   )
   const dispatch = useDispatch()
+  const toast = useToast()
 
   /**
    * Handler functions
@@ -56,19 +58,27 @@ function useVisor(): UseVisor {
           (visor: VisorUptime) => visor.key === key
         )
         if (visorDataFound)
-          setVisorData({
+          setVisorData((prevState) => ({
+            ...prevState,
             data: visorDataFound,
             loading: false,
             success: true,
-            error: undefined,
-          })
-        if (!visorDataFound)
-          setVisorData({
-            data: undefined,
+          }))
+        if (!visorDataFound) {
+          const errorMessage = 'Could not find visor.'
+          setVisorData((prevState) => ({
+            ...prevState,
             loading: false,
             success: false,
-            error: 'Could not find visor.',
+            error: errorMessage,
+          }))
+          toast({
+            title: errorMessage,
+            status: 'error',
+            isClosable: true,
           })
+        }
+
         return visorData
       },
       checkIsVisorAlreadySaved: (key: VisorKey) => {
@@ -81,7 +91,7 @@ function useVisor(): UseVisor {
         dispatch(updateVisorLabel({ key, label }))
       },
     }),
-    [dispatch, myVisorsSelector, visorData, visorsSelector]
+    [dispatch, myVisorsSelector, toast, visorData, visorsSelector]
   )
 
   return { visorData, handlers }
