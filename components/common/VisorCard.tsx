@@ -1,15 +1,19 @@
 import { useColorMode } from '@chakra-ui/color-mode'
 import { Editable, EditableInput, EditablePreview } from '@chakra-ui/editable'
 import { useClipboard } from '@chakra-ui/hooks'
+import Icon from '@chakra-ui/icon'
 import { Box, Flex, HStack, Text, VStack } from '@chakra-ui/layout'
 import { useToast } from '@chakra-ui/toast'
 import { Tooltip } from '@chakra-ui/tooltip'
 import React, { useMemo } from 'react'
+import { FaHeart } from 'react-icons/fa'
 import { MyVisorUptime, VisorKey, VisorLabel } from '../../interfaces'
 import {
   formatPercentage,
   formatSecsToDays,
+  getHealthPercentage,
 } from '../../utils/functions/dataFormatter'
+import { getSecsElapsedThisMonth } from '../../utils/functions/getTimeRelatedData'
 
 type VisorCardProps = {
   visor: MyVisorUptime
@@ -20,6 +24,8 @@ const VisorCard = ({ visor, onLabelSubmit }: VisorCardProps): JSX.Element => {
   const toast = useToast()
   const { onCopy } = useClipboard(visor.key)
   const { colorMode } = useColorMode()
+
+  const totalSecondsElapsedThisMonth = getSecsElapsedThisMonth()
 
   const handleCopyVisorKey = (): void => {
     onCopy()
@@ -35,8 +41,14 @@ const VisorCard = ({ visor, onLabelSubmit }: VisorCardProps): JSX.Element => {
       uptime: formatSecsToDays(visor.uptime),
       downtime: formatSecsToDays(visor.downtime),
       percentage: formatPercentage(visor.percentage),
+      health: getHealthPercentage(visor.uptime, totalSecondsElapsedThisMonth),
     }),
-    [visor.downtime, visor.percentage, visor.uptime]
+    [
+      totalSecondsElapsedThisMonth,
+      visor.downtime,
+      visor.percentage,
+      visor.uptime,
+    ]
   )
 
   const handleLabelSubmit = (newLabel: VisorLabel): void => {
@@ -80,6 +92,16 @@ const VisorCard = ({ visor, onLabelSubmit }: VisorCardProps): JSX.Element => {
             </Text>
           </Tooltip>
           <Text>{formattedVisorData.percentage}</Text>
+          <Text>
+            <Icon
+              aria-label="visor health icon"
+              color="red.500"
+              viewBox="0 0 20 20"
+            >
+              <FaHeart />
+            </Icon>
+            {formattedVisorData.health}
+          </Text>
         </HStack>
       </Flex>
       <Flex wordBreak="break-all" overflowWrap="break-word" overflow="hidden">
