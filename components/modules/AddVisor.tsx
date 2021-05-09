@@ -10,41 +10,19 @@ import {
   VStack,
 } from '@chakra-ui/layout'
 import useVisor from '../../hooks/useVisor'
-import { MyVisor, VisorKey } from '../../interfaces'
 
 import VisorCard from '../VisorCard'
+import useAddVisor from '../../hooks/useAddVisor'
 
-const AddVisor = (): JSX.Element => {
+function AddVisor(): JSX.Element {
   const {
     visorData,
-    handlers: { checkVisorStatus, addNewVisor },
+    handlers: { checkVisorStatus },
   } = useVisor()
-  const initialInputValuesState = useMemo(
-    () => ({ key: '', label: 'Visor' }),
-    []
-  )
-  const [inputValues, setInputValues] = useState<MyVisor>(
-    initialInputValuesState
-  )
-
-  const handleKeyInput = (e: React.ChangeEvent<HTMLInputElement>): void =>
-    setInputValues((prevState) => ({
-      ...prevState,
-      key: e.target.value,
-    }))
-
-  const onLabelSubmit = (key: VisorKey, label: string): void => {
-    setInputValues({ key, label })
-  }
-
-  const onClickCheckStatus = useCallback(() => {
-    checkVisorStatus(inputValues.key)
-    setInputValues(initialInputValuesState)
-  }, [checkVisorStatus, initialInputValuesState, inputValues.key])
-
-  const onClickAddVisor = useCallback(() => {
-    addNewVisor(inputValues)
-  }, [addNewVisor, inputValues])
+  const {
+    addVisorInput,
+    handlers: { handleKeyInput, submitLabel, addNewVisor },
+  } = useAddVisor()
 
   return (
     <VStack spacing={4} w="100%">
@@ -59,7 +37,7 @@ const AddVisor = (): JSX.Element => {
               <Text>Public key</Text>
               <Input
                 name="key"
-                value={inputValues?.key}
+                value={addVisorInput?.key}
                 onChange={handleKeyInput}
               />
             </Flex>
@@ -68,11 +46,11 @@ const AddVisor = (): JSX.Element => {
                 w="100%"
                 variant="outline"
                 colorScheme="blue"
-                onClick={onClickCheckStatus}
+                onClick={() => checkVisorStatus(addVisorInput.key)}
               >
                 Check status
               </Button>
-              <Button w="100%" colorScheme="blue" onClick={onClickAddVisor}>
+              <Button w="100%" colorScheme="blue" onClick={addNewVisor}>
                 Add visor
               </Button>
             </HStack>
@@ -86,9 +64,9 @@ const AddVisor = (): JSX.Element => {
                   downtime: visorData.data.downtime,
                   percentage: visorData.data.percentage,
                   online: visorData.data.online,
-                  label: inputValues.label,
+                  label: addVisorInput.label,
                 }}
-                onLabelSubmit={onLabelSubmit}
+                onLabelSubmit={submitLabel}
               />
             )}
           </Flex>
