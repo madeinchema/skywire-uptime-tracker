@@ -71,7 +71,7 @@ const VisorCard = ({ visor, onLabelSubmit }: VisorCardProps): JSX.Element => {
             width={3}
             height={3}
             borderRadius="100%"
-            bgColor={visor.online ? 'green' : 'red'}
+            bgColor={visor.online ? 'green.500' : 'red.500'}
           />
 
           <Editable
