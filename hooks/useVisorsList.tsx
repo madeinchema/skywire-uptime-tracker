@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { RootStateOrAny, useDispatch, useSelector } from 'react-redux'
 import { VisorUptime } from '../interfaces'
-import { saveVisorsUptimeData } from '../state/slices/visorsUptimeSlice'
+import { saveVisorsData } from '../state/slices/visorsSlice'
 import { getVisorsList } from '../utils/functions/getVisorsList'
 
 interface VisorsList {
@@ -12,7 +12,7 @@ interface VisorsList {
 }
 
 interface UseVisorsList {
-  visorsUptimeList: VisorsList
+  visorsList: VisorsList
   handlers: {
     toggleShowVisorsList: () => void
   }
@@ -25,8 +25,8 @@ function useVisorsList(): UseVisorsList {
     isHidden: true,
     error: undefined,
   })
-  const visorsUptimesSelector = useSelector(
-    (state: RootStateOrAny) => state.visorsUptime.visors
+  const visorsSelector = useSelector(
+    (state: RootStateOrAny) => state.visors.data
   )
   const dispatch = useDispatch()
 
@@ -34,30 +34,30 @@ function useVisorsList(): UseVisorsList {
    * Get Visors List
    */
   useEffect(() => {
-    const shouldGetVisors = visorsUptimesSelector.length < 1
+    const shouldGetVisors = visorsSelector.length < 1
     if (shouldGetVisors) {
       // TODO: Remember to remove this setTimeout later
       setTimeout(() => {
         getVisorsList('USE_FAKE_DATA').then((data) =>
-          dispatch(saveVisorsUptimeData(data))
+          dispatch(saveVisorsData(data))
         )
       }, 1000)
     }
-  }, [dispatch, visorsUptimesSelector.length])
+  }, [dispatch, visorsSelector.length])
 
   /**
    * Set Visors List
    */
   useEffect(() => {
-    const shouldSetVisors = visorsUptimesSelector.length > 0
+    const shouldSetVisors = visorsSelector.length > 0
     if (shouldSetVisors) {
       setVisorsList((prevState) => ({
         ...prevState,
-        data: visorsUptimesSelector,
+        data: visorsSelector,
         isLoading: false,
       }))
     }
-  }, [visorsUptimesSelector])
+  }, [visorsSelector])
 
   /**
    * Handlers
@@ -73,7 +73,7 @@ function useVisorsList(): UseVisorsList {
     []
   )
 
-  return { visorsUptimeList: visorsList, handlers }
+  return { visorsList, handlers }
 }
 
 export default useVisorsList

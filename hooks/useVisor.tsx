@@ -32,8 +32,8 @@ function useVisor(): UseVisor {
     success: false,
     error: undefined,
   })
-  const visorsUptimeListSelector = useSelector(
-    (state: RootStateOrAny) => state.visorsUptime.visors
+  const visorsSelector = useSelector(
+    (state: RootStateOrAny) => state.visors.data
   )
   const myVisorsSelector = useSelector(
     (state: RootStateOrAny) => state.myVisors.visors
@@ -66,7 +66,7 @@ function useVisor(): UseVisor {
           success: false,
           error: undefined,
         })
-        const visorDataFound = visorsUptimeListSelector?.find(
+        const visorDataFound = visorsSelector?.find(
           (visor: VisorUptime) => visor.key === key
         )
         if (visorDataFound)
@@ -107,7 +107,7 @@ function useVisor(): UseVisor {
         dispatch(updateVisorLabel({ key, label }))
       },
     }),
-    [checkIsVisorAlreadySaved, dispatch, toast, visorsUptimeListSelector]
+    [checkIsVisorAlreadySaved, dispatch, toast, visorsSelector]
   )
 
   return { visorData, handlers }

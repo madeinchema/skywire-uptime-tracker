@@ -37,8 +37,8 @@ function useMyVisors(): UseMyVisors {
   const myVisorsSelector: MyVisor[] = useSelector(
     (state: RootStateOrAny) => state.myVisors.visors
   )
-  const visorsUptimeListSelector = useSelector(
-    (state: RootStateOrAny) => state.visorsUptime.visors
+  const visorsSelector = useSelector(
+    (state: RootStateOrAny) => state.visors.data
   )
   const dispatch = useDispatch()
 
@@ -61,8 +61,8 @@ function useMyVisors(): UseMyVisors {
     const visorKeysToMatch = myVisorsSelector.map(
       (myVisor: MyVisor) => myVisor.key
     )
-    const matchingVisors = visorsUptimeListSelector.filter(
-      (visor: VisorUptime) => visorKeysToMatch.includes(visor.key)
+    const matchingVisors = visorsSelector.filter((visor: VisorUptime) =>
+      visorKeysToMatch.includes(visor.key)
     )
     const myVisorsUptimesWithLabels = matchingVisors.map(
       (visor: VisorUptime) => {
@@ -81,20 +81,20 @@ function useMyVisors(): UseMyVisors {
       ...prevState,
       data: sortedVisors,
     }))
-  }, [myVisorsSelector, visorsUptimeListSelector])
+  }, [myVisorsSelector, visorsSelector])
 
   /**
    * Handle loading based off VisorsUptimeList
    */
   useEffect(() => {
-    const isVisorsUptimeListLoaded = visorsUptimeListSelector.length > 0
+    const isVisorsUptimeListLoaded = visorsSelector.length > 0
     if (isVisorsUptimeListLoaded) {
       setMyVisors((prevState) => ({
         ...prevState,
         isLoading: false,
       }))
     }
-  }, [visorsUptimeListSelector.length])
+  }, [visorsSelector.length])
 
   /**
    * Utility functions
