@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
 import { RootStateOrAny, useDispatch, useSelector } from 'react-redux'
 import {
   MyVisor,
@@ -12,7 +13,6 @@ import {
   updateVisorLabel,
   removeVisor,
 } from '../state/slices/myVisorsSlice'
-import { getMyVisorsList } from '../utils/functions/getVisorsList'
 
 /**
  * Types
@@ -48,17 +48,39 @@ function useMyVisors(): UseMyVisors {
   )
   const dispatch = useDispatch()
 
+  const { query: visorsFromURL } = useRouter()
+  const existVisorsFromURL = Object.keys(visorsFromURL).length > 0
+
+  /**
+   * Check and/or get visors from URL
+   */
+  useEffect(() => {
+    if (existVisorsFromURL) {
+      const formatVisorsFromURL = (): unknown[] => {
+        const formattedVisors = Object.keys(visorsFromURL).map(
+          (visorLabel: VisorLabel) => {
+            const key = visorsFromURL[visorLabel]
+            return { label: visorLabel, key }
+          }
+        )
+        return formattedVisors
+      }
+      const formattedVisorsFromURL = formatVisorsFromURL()
+      dispatch(saveMyVisorsData(formattedVisorsFromURL))
+    }
+  }, [dispatch, existVisorsFromURL, visorsFromURL])
+
   /**
    * Get and save data to store when its empty
    */
-  useEffect(() => {
-    const shouldGetData = myVisorsSelector.length < 1
-    if (shouldGetData) {
-      getMyVisorsList('USE_FAKE_DATA').then((data) =>
-        dispatch(saveMyVisorsData(data))
-      )
-    }
-  }, [dispatch, myVisorsSelector.length])
+  // useEffect(() => {
+  //   const shouldGetData = myVisorsSelector.length < 1
+  //   if (shouldGetData) {
+  //     getMyVisorsList('USE_FAKE_DATA').then((data) =>
+  //       dispatch(saveMyVisorsData(data))
+  //     )
+  //   }
+  // }, [dispatch, myVisorsSelector.length])
 
   /**
    * Update myVisorsList on store changes
