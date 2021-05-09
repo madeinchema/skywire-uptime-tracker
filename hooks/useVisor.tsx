@@ -1,13 +1,12 @@
-import { useToast } from '@chakra-ui/toast'
-import React, { useCallback, useState } from 'react'
+import React, { useState } from 'react'
 import { RootStateOrAny, useDispatch, useSelector } from 'react-redux'
-import { MyVisor, VisorKey, VisorUptime } from '../interfaces'
-import { addNewVisor, updateVisorLabel } from '../state/slices/myVisorsSlice'
+import { MyVisor, VisorKey, VisorLabel, VisorUptime } from '../interfaces'
+import { updateVisorLabel } from '../state/slices/myVisorsSlice'
 
 /**
  * Types
  */
-type VisorData = {
+export interface VisorData {
   data: VisorUptime | undefined
   loading: boolean
   success: boolean
@@ -17,8 +16,9 @@ type VisorData = {
 interface UseVisor {
   visorData: VisorData
   handlers: {
-    checkVisorStatus: (key: VisorKey) => void
-    addNewVisor: (visor: MyVisor) => void
+    checkVisorStatus: (key: VisorKey) => VisorData
+    checkIsVisorAlreadySaved: (key: VisorKey) => boolean
+    updateVisorLabel: (label: VisorLabel, key: VisorKey) => void
   }
 }
 
@@ -39,27 +39,13 @@ function useVisor(): UseVisor {
     (state: RootStateOrAny) => state.myVisors.visors
   )
   const dispatch = useDispatch()
-  const toast = useToast()
-
-  /**
-   * Utility functions
-   */
-  const checkIsVisorAlreadySaved = useCallback(
-    (key: VisorKey) => {
-      const canFindVisor = myVisorsSelector.find(
-        (visor: MyVisor) => visor.key === key
-      )
-      return !!canFindVisor
-    },
-    [myVisorsSelector]
-  )
 
   /**
    * Handler functions
    */
   const handlers = React.useMemo(
     () => ({
-      checkVisorStatus: (key: VisorKey): void => {
+      checkVisorStatus: (key: VisorKey): VisorData => {
         setVisorData({
           data: undefined,
           loading: true,
@@ -83,31 +69,19 @@ function useVisor(): UseVisor {
             success: false,
             error: 'Could not find visor.',
           })
+        return visorData
       },
-      addNewVisor: (visor: MyVisor): void => {
-        const isVisorAlreadySaved = checkIsVisorAlreadySaved(visor.key)
-        if (isVisorAlreadySaved) {
-          const error = 'This visor is already in your list.'
-          setVisorData((prevState) => ({
-            data: prevState.data,
-            loading: prevState.loading,
-            success: prevState.success,
-            error,
-          }))
-          toast({
-            title: error,
-            status: 'error',
-            isClosable: true,
-          })
-        } else {
-          dispatch(addNewVisor(visor))
-        }
+      checkIsVisorAlreadySaved: (key: VisorKey) => {
+        const canFindVisor = myVisorsSelector.find(
+          (visor: MyVisor) => visor.key === key
+        )
+        return !!canFindVisor
       },
-      updateVisorLabel: (label: string, key: VisorKey): void => {
+      updateVisorLabel: (label: VisorLabel, key: VisorKey): void => {
         dispatch(updateVisorLabel({ key, label }))
       },
     }),
-    [checkIsVisorAlreadySaved, dispatch, toast, visorsSelector]
+    [dispatch, myVisorsSelector, visorData, visorsSelector]
   )
 
   return { visorData, handlers }
