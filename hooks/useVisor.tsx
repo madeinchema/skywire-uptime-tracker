@@ -48,12 +48,12 @@ function useVisor(): UseVisor {
   const handlers = React.useMemo(
     () => ({
       checkVisorStatus: (key: VisorKey): VisorData => {
-        setVisorData({
-          data: undefined,
+        setVisorData((prevState) => ({
+          ...prevState,
           loading: true,
           success: false,
           error: undefined,
-        })
+        }))
         const visorDataFound = visorsSelector?.find(
           (visor: VisorUptime) => visor.key === key
         )
