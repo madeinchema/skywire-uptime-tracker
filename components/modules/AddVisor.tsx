@@ -64,25 +64,14 @@ const AddVisor = (): JSX.Element => {
               />
             </Flex>
             <HStack direction="column" w="100%">
-              {visorData.data && visorData.success ? (
-                <Button
-                  w="100%"
-                  variant="outline"
-                  colorScheme={inputValues.key.length > 0 ? 'blue' : 'red'}
-                  onClick={onClickCheckStatus}
-                >
-                  {inputValues.key.length > 0 ? 'Check other visor' : 'Reset'}
-                </Button>
-              ) : (
-                <Button
-                  w="100%"
-                  variant="outline"
-                  colorScheme="blue"
-                  onClick={onClickCheckStatus}
-                >
-                  Check status
-                </Button>
-              )}
+              <Button
+                w="100%"
+                variant="outline"
+                colorScheme="blue"
+                onClick={onClickCheckStatus}
+              >
+                Check status
+              </Button>
               <Button w="100%" colorScheme="blue" onClick={onClickAddVisor}>
                 Add visor
               </Button>
