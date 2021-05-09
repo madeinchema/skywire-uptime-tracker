@@ -2,7 +2,7 @@ import React from 'react'
 import { Heading, VStack } from '@chakra-ui/layout'
 import { Button } from '@chakra-ui/button'
 import useVisorsList from '../../hooks/useVisorsList'
-import VisorsTable from '../VisorsTable'
+import VisorsTable from '../common/VisorsTable/VisorsTable'
 
 const VisorsList = (): JSX.Element => {
   const {

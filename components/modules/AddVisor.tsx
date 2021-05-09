@@ -10,7 +10,7 @@ import {
 } from '@chakra-ui/layout'
 import useVisor from '../../hooks/useVisor'
 
-import VisorCard from '../VisorCard'
+import VisorCard from '../common/VisorCard'
 import useAddVisor from '../../hooks/useAddVisor'
 
 function AddVisor(): JSX.Element {

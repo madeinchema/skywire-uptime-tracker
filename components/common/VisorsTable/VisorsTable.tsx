@@ -15,10 +15,17 @@ import {
   formatPercentage,
   formatSecsToDays,
   getHealthPercentage,
-} from '../utils/functions/dataFormatter'
-import { VisorUptime, MyVisorUptime, VisorKey, VisorLabel } from '../interfaces'
-import DeleteVisorTableCell from './modules/MyVisors/components/DeleteVisorTableCell'
-import { getSecsElapsedThisMonth } from '../utils/functions/getTimeRelatedData'
+} from '../../../utils/functions/dataFormatter'
+import {
+  VisorUptime,
+  MyVisorUptime,
+  VisorKey,
+  VisorLabel,
+} from '../../../interfaces'
+import { getSecsElapsedThisMonth } from '../../../utils/functions/getTimeRelatedData'
+
+import DeleteVisorTableCell from '../../modules/MyVisors/components/DeleteVisorTableCell'
+import VisorKeyTableCell from './components/VisorKeyTableCell'
 
 type VisorFromDataSource = VisorUptime | MyVisorUptime
 type DataSource = VisorUptime[] | MyVisorUptime[]
@@ -35,7 +42,6 @@ const VisorsTable = ({
   const areVisorsWithLabel = (
     dataToCheck: DataSource
   ): dataToCheck is DataSource => dataToCheck.some((visor) => 'label' in visor)
-
   const totalSecondsElapsedThisMonth = getSecsElapsedThisMonth()
 
   return (
@@ -78,7 +84,7 @@ const VisorsTable = ({
                         width={3}
                         height={3}
                         borderRadius="100%"
-                        bgColor={visor.online ? 'green' : 'red'}
+                        bgColor={visor.online ? 'green.500' : 'red.500'}
                       />
                     </Td>
 
@@ -96,9 +102,7 @@ const VisorsTable = ({
                         </Editable>
                       </Td>
                     )}
-                    <Td wordBreak="break-all" minW="320px">
-                      {visor.key}
-                    </Td>
+                    <VisorKeyTableCell visorKey={visor.key} />
                     <Td isNumeric>{formattedVisorData.percentage}</Td>
                     <Td isNumeric>{formattedVisorData.uptime}</Td>
                     <Td isNumeric>{formattedVisorData.downtime}</Td>
