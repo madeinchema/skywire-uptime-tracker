@@ -14,6 +14,9 @@ import {
 } from '../state/slices/myVisorsSlice'
 import { getMyVisorsList } from '../utils/functions/getVisorsList'
 
+/**
+ * Types
+ */
 interface MyVisors {
   data: MyVisorUptime[] | undefined
   isLoading: boolean
@@ -28,6 +31,9 @@ interface UseMyVisors {
   }
 }
 
+/**
+ * useMyVisors hook
+ */
 function useMyVisors(): UseMyVisors {
   const [myVisors, setMyVisors] = useState<MyVisors>({
     data: undefined,
@@ -95,10 +101,6 @@ function useMyVisors(): UseMyVisors {
       }))
     }
   }, [visorsSelector.length])
-
-  /**
-   * Utility functions
-   */
 
   /**
    * Handlers

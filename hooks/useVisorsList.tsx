@@ -4,6 +4,9 @@ import { VisorUptime } from '../interfaces'
 import { saveVisorsData } from '../state/slices/visorsSlice'
 import { getVisorsList } from '../utils/functions/getVisorsList'
 
+/**
+ * Types
+ */
 interface VisorsList {
   data: VisorUptime[] | undefined
   isLoading: boolean
@@ -18,6 +21,9 @@ interface UseVisorsList {
   }
 }
 
+/**
+ * useVisorsList hook
+ */
 function useVisorsList(): UseVisorsList {
   const [visorsList, setVisorsList] = useState<VisorsList>({
     data: undefined,
