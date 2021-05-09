@@ -1,4 +1,3 @@
-import { useCallback, useMemo, useState } from 'react'
 import { Button } from '@chakra-ui/button'
 import { Input } from '@chakra-ui/input'
 import {
@@ -9,42 +8,20 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/layout'
-import useVisorData from '../../hooks/useVisorData'
-import { MyVisor, VisorKey } from '../../interfaces'
+import useVisor from '../../hooks/useVisor'
 
 import VisorCard from '../VisorCard'
+import useAddVisor from '../../hooks/useAddVisor'
 
-const AddVisor = (): JSX.Element => {
+function AddVisor(): JSX.Element {
   const {
     visorData,
-    handlers: { checkVisorStatus, addNewVisor },
-  } = useVisorData()
-  const initialInputValuesState = useMemo(
-    () => ({ key: '', label: 'Visor' }),
-    []
-  )
-  const [inputValues, setInputValues] = useState<MyVisor>(
-    initialInputValuesState
-  )
-
-  const handleKeyInput = (e: React.ChangeEvent<HTMLInputElement>): void =>
-    setInputValues((prevState) => ({
-      ...prevState,
-      key: e.target.value,
-    }))
-
-  const onLabelSubmit = (key: VisorKey, label: string): void => {
-    setInputValues({ key, label })
-  }
-
-  const onClickCheckStatus = useCallback(() => {
-    checkVisorStatus(inputValues.key)
-    setInputValues(initialInputValuesState)
-  }, [checkVisorStatus, initialInputValuesState, inputValues.key])
-
-  const onClickAddVisor = useCallback(() => {
-    addNewVisor(inputValues)
-  }, [addNewVisor, inputValues])
+    handlers: { checkVisorStatus },
+  } = useVisor()
+  const {
+    addVisorInput,
+    handlers: { handleKeyInput, submitLabel, addNewVisor },
+  } = useAddVisor()
 
   return (
     <VStack spacing={4} w="100%">
@@ -59,31 +36,20 @@ const AddVisor = (): JSX.Element => {
               <Text>Public key</Text>
               <Input
                 name="key"
-                value={inputValues?.key}
+                value={addVisorInput?.key}
                 onChange={handleKeyInput}
               />
             </Flex>
             <HStack direction="column" w="100%">
-              {visorData.data && visorData.success ? (
-                <Button
-                  w="100%"
-                  variant="outline"
-                  colorScheme={inputValues.key.length > 0 ? 'blue' : 'red'}
-                  onClick={onClickCheckStatus}
-                >
-                  {inputValues.key.length > 0 ? 'Check other visor' : 'Reset'}
-                </Button>
-              ) : (
-                <Button
-                  w="100%"
-                  variant="outline"
-                  colorScheme="blue"
-                  onClick={onClickCheckStatus}
-                >
-                  Check status
-                </Button>
-              )}
-              <Button w="100%" colorScheme="blue" onClick={onClickAddVisor}>
+              <Button
+                w="100%"
+                variant="outline"
+                colorScheme="blue"
+                onClick={() => checkVisorStatus(addVisorInput.key)}
+              >
+                Check status
+              </Button>
+              <Button w="100%" colorScheme="blue" onClick={addNewVisor}>
                 Add visor
               </Button>
             </HStack>
@@ -97,9 +63,9 @@ const AddVisor = (): JSX.Element => {
                   downtime: visorData.data.downtime,
                   percentage: visorData.data.percentage,
                   online: visorData.data.online,
-                  label: inputValues.label,
+                  label: addVisorInput.label,
                 }}
-                onLabelSubmit={onLabelSubmit}
+                onLabelSubmit={submitLabel}
               />
             )}
           </Flex>
