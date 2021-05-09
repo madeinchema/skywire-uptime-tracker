@@ -3,6 +3,7 @@ import { useColorMode } from '@chakra-ui/color-mode'
 import { Flex, Heading, HStack, Link } from '@chakra-ui/layout'
 import { FaGithub, FaMoon } from 'react-icons/fa'
 import { MdWbSunny } from 'react-icons/md'
+import HeaderInfo from './components/HeaderInfo'
 
 const Header = (): JSX.Element => {
   const { colorMode, toggleColorMode } = useColorMode()
@@ -30,6 +31,8 @@ const Header = (): JSX.Element => {
           bgColor="blue.400"
           color="white"
         />
+
+        <HeaderInfo />
 
         <Link
           href="https://github.com/madeinchema/skywire-uptime-tracker"

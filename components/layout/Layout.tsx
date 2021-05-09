@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react'
 import Head from 'next/head'
 import { Flex } from '@chakra-ui/layout'
-import Header from './Header'
+import Header from './Header/Header'
 
 type Props = {
   children?: ReactNode
