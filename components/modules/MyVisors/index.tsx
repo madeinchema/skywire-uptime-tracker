@@ -2,7 +2,9 @@ import { Heading, Text, VStack } from '@chakra-ui/layout'
 import { Spinner } from '@chakra-ui/spinner'
 import React from 'react'
 import useMyVisors from '../../../hooks/useMyVisors'
+
 import VisorsTable from '../../common/VisorsTable/VisorsTable'
+import URLGenerator from './components/URLGenerator'
 
 const MyVisors = (): JSX.Element => {
   const {
@@ -21,7 +23,10 @@ const MyVisors = (): JSX.Element => {
       {isEmptyData && !isLoading ? (
         <Text>No visors have been added yet.</Text>
       ) : (
-        <VisorsTable dataSource={data} onLabelSubmit={updateVisorLabel} />
+        <>
+          <VisorsTable dataSource={data} onLabelSubmit={updateVisorLabel} />
+          <URLGenerator />
+        </>
       )}
     </VStack>
   )
