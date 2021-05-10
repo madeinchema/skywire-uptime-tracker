@@ -51,13 +51,7 @@ const URLGenerator = (): JSX.Element => {
     <Flex w="lg" justify="center">
       {showURL ? (
         <InputGroup size="md">
-          <Input
-            type="text"
-            isReadOnly
-            isFullWidth
-            value={generatedURL}
-            pr="4.5rem"
-          />
+          <Input type="text" isReadOnly value={generatedURL} pr="4.5rem" />
           <InputRightElement width="4.5rem">
             <Button h="1.75rem" size="sm" onClick={handleCopyURL}>
               Copy
