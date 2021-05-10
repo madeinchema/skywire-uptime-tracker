@@ -1,6 +1,6 @@
 import { Button } from '@chakra-ui/button'
 import { Input, InputGroup, InputRightElement } from '@chakra-ui/input'
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { RootStateOrAny, useSelector } from 'react-redux'
 import { Flex } from '@chakra-ui/layout'
 import { useClipboard } from '@chakra-ui/hooks'
@@ -26,21 +26,25 @@ const URLGenerator = (): JSX.Element => {
     })
   }
 
-  const getVisorsURL = (): string => {
+  const getVisorsURL = useCallback((): string => {
     const BASE_URL = `${config.SITE_URL}/?`
-    const separator = '&'
-    const pairJoiner = '='
     const visorsQueryString = myVisorsSelector
-      .map((visor) => visor.label + pairJoiner + visor.key)
-      .join(separator)
-    const URL = BASE_URL + visorsQueryString
-    return URL
-  }
+      .map((visor) => `${visor.label}=${visor.key}`)
+      .join('&')
+    return BASE_URL + visorsQueryString
+  }, [myVisorsSelector])
+
+  /* Get and update visors URL */
+  useEffect(() => {
+    if (showURL) {
+      getVisorsURL()
+      const visorsURL = getVisorsURL()
+      setGeneratedURL(visorsURL)
+    }
+  }, [getVisorsURL, myVisorsSelector, showURL])
 
   const handleGenerateURL = (): void => {
     setShowURL(true)
-    const visorsURL = getVisorsURL()
-    setGeneratedURL(visorsURL)
   }
 
   return (
