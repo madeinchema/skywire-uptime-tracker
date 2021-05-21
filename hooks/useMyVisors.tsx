@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { RootStateOrAny, useDispatch, useSelector } from 'react-redux'
 import {
@@ -9,9 +9,9 @@ import {
   VisorUptime,
 } from '../interfaces'
 import {
-  saveMyVisorsData,
   updateVisorLabel,
   removeVisor,
+  addMyVisors,
 } from '../state/slices/myVisorsSlice'
 
 /**
@@ -41,51 +41,25 @@ function useMyVisors(): UseMyVisors {
     error: undefined,
   })
   const myVisorsSelector: MyVisor[] = useSelector(
-    (state: RootStateOrAny) => state.myVisors.visors
+    (state: RootStateOrAny) => state.myVisors.data
   )
   const visorsSelector = useSelector(
     (state: RootStateOrAny) => state.visors.data
   )
+  const { query: visorsFromQueryString } = useRouter()
   const dispatch = useDispatch()
 
-  const { query: visorsFromURL } = useRouter()
-  const existVisorsFromURL = Object.keys(visorsFromURL).length > 0
-
-  /**
-   * Check and/or get visors from URL
-   */
-  useEffect(() => {
-    if (existVisorsFromURL) {
-      const formatVisorsFromURL = (): unknown[] => {
-        const formattedVisors = Object.keys(visorsFromURL).map(
-          (visorLabel: VisorLabel) => {
-            const key = visorsFromURL[visorLabel]
-            return { label: visorLabel, key }
-          }
-        )
-        return formattedVisors
+  const getVisorsFromURL = useCallback(() => {
+    const formattedVisors = Object.keys(visorsFromQueryString).map(
+      (visorLabel: VisorLabel) => {
+        const visorKey = visorsFromQueryString[visorLabel]
+        return { label: visorLabel, visorKey } as MyVisor
       }
-      const formattedVisorsFromURL = formatVisorsFromURL()
-      dispatch(saveMyVisorsData(formattedVisorsFromURL))
-    }
-  }, [dispatch, existVisorsFromURL, visorsFromURL])
+    )
+    return formattedVisors
+  }, [visorsFromQueryString])
 
-  /**
-   * Get and save data to store when its empty
-   */
-  // useEffect(() => {
-  //   const shouldGetData = myVisorsSelector.length < 1
-  //   if (shouldGetData) {
-  //     getMyVisorsList('USE_FAKE_DATA').then((data) =>
-  //       dispatch(saveMyVisorsData(data))
-  //     )
-  //   }
-  // }, [dispatch, myVisorsSelector.length])
-
-  /**
-   * Update myVisorsList on store changes
-   */
-  useEffect(() => {
+  const getMyVisorsUptimes = useCallback((): MyVisorUptime[] => {
     const visorKeysToMatch = myVisorsSelector.map(
       (myVisor: MyVisor) => myVisor.visorKey
     )
@@ -104,25 +78,26 @@ function useMyVisors(): UseMyVisors {
       (a: MyVisorUptime, b: MyVisorUptime) =>
         a.label.localeCompare(b.label, 'en', { numeric: true })
     )
-
-    setMyVisors((prevState) => ({
-      ...prevState,
-      data: sortedVisors,
-    }))
+    return sortedVisors
   }, [myVisorsSelector, visorsSelector])
 
-  /**
-   * Handle loading based off VisorsUptimeList
-   */
+  /* Initialize myVisors store */
   useEffect(() => {
-    const isVisorsUptimeListLoaded = visorsSelector.length > 0
-    if (isVisorsUptimeListLoaded) {
-      setMyVisors((prevState) => ({
-        ...prevState,
-        isLoading: false,
-      }))
+    if (visorsSelector.length > 0) {
+      const visorsFromURL = getVisorsFromURL()
+      dispatch(addMyVisors(visorsFromURL))
     }
-  }, [visorsSelector.length])
+  }, [visorsSelector, getVisorsFromURL, dispatch])
+
+  /* Maintain myVisors state updated */
+  useEffect(() => {
+    const myVisorsUptimes = getMyVisorsUptimes()
+    setMyVisors(prevState => ({
+      ...prevState,
+      data: myVisorsUptimes,
+      isLoading: false,
+    }))
+  }, [getMyVisorsUptimes, myVisorsSelector])
 
   /**
    * Handlers
