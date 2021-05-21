@@ -4,7 +4,7 @@ import {
   getDefaultMiddleware,
 } from '@reduxjs/toolkit'
 import createSagaMiddleware from 'redux-saga'
-import { watcherSaga } from './sagas/rootSaga'
+import { rootSaga } from './sagas/rootSaga'
 
 import visorsReducer from './slices/visorsSlice'
 import myVisorsReducer from './slices/myVisorsSlice'
@@ -25,4 +25,4 @@ export default configureStore({
   reducer,
   middleware,
 })
-sagaMiddleware.run(watcherSaga)
+sagaMiddleware.run(rootSaga)
