@@ -1,7 +1,7 @@
-import { useToast } from '@chakra-ui/toast'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { RootStateOrAny, useDispatch, useSelector } from 'react-redux'
 import { MyVisor, VisorKey, VisorLabel, VisorUptime } from '../interfaces'
+import { checkVisor } from '../state/slices/checkVisorSlice'
 import { updateVisorLabel } from '../state/slices/myVisorsSlice'
 
 /**
@@ -17,7 +17,8 @@ export interface VisorData {
 interface UseVisor {
   visorData: VisorData
   handlers: {
-    checkVisorStatus: (key: VisorKey) => VisorData
+    canFindVisor: (key: VisorKey) => boolean
+    checkVisorStatus: (key: VisorKey) => void
     checkIsVisorAlreadySaved: (key: VisorKey) => boolean
     updateVisorLabel: (label: VisorLabel, key: VisorKey) => void
   }
@@ -39,47 +40,30 @@ function useVisor(): UseVisor {
   const myVisorsSelector = useSelector(
     (state: RootStateOrAny) => state.myVisors.visors
   )
+  const checkedVisorSelector = useSelector(
+    (state: RootStateOrAny) => state.checkedVisor
+  )
   const dispatch = useDispatch()
-  const toast = useToast()
+
+  useEffect(() => {
+    if (checkedVisorSelector.success) {
+      setVisorData(checkedVisorSelector)
+    }
+  }, [checkedVisorSelector])
 
   /**
    * Handler functions
    */
   const handlers = React.useMemo(
     () => ({
-      checkVisorStatus: (key: VisorKey): VisorData => {
-        setVisorData((prevState) => ({
-          ...prevState,
-          loading: true,
-          success: false,
-          error: undefined,
-        }))
+      canFindVisor: (key: VisorKey): boolean => {
         const visorDataFound = visorsSelector?.find(
           (visor: VisorUptime) => visor.key === key
         )
-        if (visorDataFound)
-          setVisorData((prevState) => ({
-            ...prevState,
-            data: visorDataFound,
-            loading: false,
-            success: true,
-          }))
-        if (!visorDataFound) {
-          const errorMessage = 'Could not find visor.'
-          setVisorData((prevState) => ({
-            ...prevState,
-            loading: false,
-            success: false,
-            error: errorMessage,
-          }))
-          toast({
-            title: errorMessage,
-            status: 'error',
-            isClosable: true,
-          })
-        }
-
-        return visorData
+        return !!visorDataFound
+      },
+      checkVisorStatus: (key: VisorKey): void => {
+        dispatch(checkVisor(key))
       },
       checkIsVisorAlreadySaved: (key: VisorKey) => {
         const canFindVisor = myVisorsSelector.find(
@@ -91,7 +75,7 @@ function useVisor(): UseVisor {
         dispatch(updateVisorLabel({ key, label }))
       },
     }),
-    [dispatch, myVisorsSelector, toast, visorData, visorsSelector]
+    [dispatch, myVisorsSelector, visorsSelector]
   )
 
   return { visorData, handlers }
