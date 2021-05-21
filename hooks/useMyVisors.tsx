@@ -5,7 +5,7 @@ import { MyVisor, MyVisorUptime, VisorKey, VisorLabel } from '../interfaces'
 import {
   updateVisorLabel,
   removeVisor,
-  addMyVisors,
+  loadMyVisors,
 } from '../state/slices/myVisorsSlice'
 import { getMyVisorsUptimes } from '../utils/functions/prepareMyVisorsUptimes'
 
@@ -65,7 +65,7 @@ function useMyVisors(): UseMyVisors {
   useEffect(() => {
     if (visorsSelector.length > 0) {
       const visorsFromURL = getVisorsFromURL()
-      dispatch(addMyVisors(visorsFromURL))
+      dispatch(loadMyVisors(visorsFromURL))
     }
   }, [visorsSelector, getVisorsFromURL, dispatch])
 

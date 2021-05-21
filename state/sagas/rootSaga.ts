@@ -2,18 +2,22 @@ import { spawn, takeLatest } from 'redux-saga/effects'
 
 import { checkVisor } from '../slices/checkVisorSlice'
 import { handleCheckVisor } from './handlers/checkVisor'
-import { addMyVisors } from '../slices/myVisorsSlice'
-import { handleAddMyVisors } from './handlers/myVisors'
+import { addMyVisor, loadMyVisors } from '../slices/myVisorsSlice'
+import { handleAddMyVisor, handleLoadMyVisors } from './handlers/myVisors'
 
 export function* watcherSaga() {
   yield takeLatest(checkVisor.type, handleCheckVisor)
 }
 
-export function* watchMyVisors() {
-  yield takeLatest(addMyVisors.type, handleAddMyVisors)
+export function* watchLoadMyVisors() {
+  yield takeLatest(loadMyVisors.type, handleLoadMyVisors)
+}
+export function* watchAddMyVisor() {
+  yield takeLatest(addMyVisor.type, handleAddMyVisor)
 }
 
 export function* rootSaga() {
   yield spawn(watcherSaga)
-  yield spawn(watchMyVisors)
+  yield spawn(watchLoadMyVisors)
+  yield spawn(watchAddMyVisor)
 }

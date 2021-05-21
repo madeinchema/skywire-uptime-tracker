@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { VisorKey } from '../interfaces'
-import { addMyVisors } from '../state/slices/myVisorsSlice'
+import { addMyVisor } from '../state/slices/myVisorsSlice'
 
 /**
  * Types
@@ -41,7 +41,7 @@ function useAddVisor(): UseAddVisor {
     () => ({
       addNewVisor: (): void => {
         dispatch(
-          addMyVisors({
+          addMyVisor({
             visorKey: addVisorInput.visorKey,
             label: addVisorInput.label,
           })

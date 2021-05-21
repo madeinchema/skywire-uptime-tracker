@@ -40,19 +40,18 @@ export const myVisorsSlice = createSlice({
   name: 'myVisors',
   initialState,
   reducers: {
-    addMyVisors() {},
-    saveMyVisorsData: (state, action) => {
-      state.data = action.payload
-    },
-    addNewVisor: (
-      state,
-      { payload: { visorKey, label } }: AddNewVisorAction
-    ) => {
-      const newVisor = {
-        visorKey,
-        label: label || 'Visor',
-      }
-      state.data = [...state.data, newVisor]
+    loadMyVisors: () => {},
+    addMyVisor: () => {},
+    addMyVisorSuccess: {
+      reducer: (state, { payload }: AddNewVisorAction) => {
+        state.data.push(payload)
+      },
+      prepare: payload => ({
+        payload: {
+          ...payload,
+          label: payload.label || 'Visor',
+        },
+      }),
     },
     updateVisorLabel: (
       state,
@@ -76,9 +75,9 @@ export const myVisorsSlice = createSlice({
 })
 
 export const {
-  addMyVisors,
-  addNewVisor,
-  saveMyVisorsData,
+  loadMyVisors,
+  addMyVisor,
+  addMyVisorSuccess,
   updateVisorLabel,
   removeVisor,
 } = myVisorsSlice.actions
