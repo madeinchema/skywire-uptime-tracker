@@ -1,22 +1,23 @@
 import { useToast } from '@chakra-ui/toast'
 import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { removeToast } from '../state/slices/toastsSlice'
+import { RootStateOrAny, useDispatch, useSelector } from 'react-redux'
+import { removeToast, setToastShown } from '../state/slices/toastsSlice'
 
 const useToasts = (): void => {
-  const toasts = useSelector(state => state.toasts)
+  const toasts = useSelector((state: RootStateOrAny) => state.toasts)
   const dispatch = useDispatch()
   const toast = useToast()
 
   useEffect(() => {
-    if (toasts.data.length > 0) {
-      toasts.data.forEach(toastData => {
+    toasts.data.forEach(toastData => {
+      if (!toastData.shown) {
         toast({
           ...toastData,
           onCloseComplete: () => dispatch(removeToast(toastData.id)),
         })
-      })
-    }
+        dispatch(setToastShown(toastData.id))
+      }
+    })
   }, [dispatch, toast, toasts.data])
 }
 
