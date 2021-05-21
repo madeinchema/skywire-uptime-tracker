@@ -1,9 +1,7 @@
-import { useToast } from '@chakra-ui/toast'
 import { useMemo, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { VisorKey } from '../interfaces'
-import { addNewVisor } from '../state/slices/myVisorsSlice'
-import useVisor from './useVisor'
+import { addMyVisors } from '../state/slices/myVisorsSlice'
 
 /**
  * Types
@@ -34,11 +32,7 @@ function useAddVisor(): UseAddVisor {
   const [addVisorInput, setAddVisorInput] = useState<AddVisorInput>(
     initialInputValuesState
   )
-  const {
-    handlers: { checkIsVisorAlreadySaved },
-  } = useVisor()
   const dispatch = useDispatch()
-  const toast = useToast()
 
   /**
    * Handlers
@@ -46,28 +40,12 @@ function useAddVisor(): UseAddVisor {
   const handlers = useMemo(
     () => ({
       addNewVisor: (): void => {
-        const isVisorAlreadySaved = checkIsVisorAlreadySaved(
-          addVisorInput.visorKey
-        )
-        if (isVisorAlreadySaved) {
-          const error = 'This visor is already in your list.'
-          setAddVisorInput(prevState => ({
-            ...prevState,
-            error,
-          }))
-          toast({
-            title: error,
-            status: 'error',
-            isClosable: true,
+        dispatch(
+          addMyVisors({
+            visorKey: addVisorInput.visorKey,
+            label: addVisorInput.label,
           })
-        } else {
-          dispatch(
-            addNewVisor({
-              visorKey: addVisorInput.visorKey,
-              label: addVisorInput.label,
-            })
-          )
-        }
+        )
       },
       submitLabel: (visorKey: VisorKey, label: string): void => {
         setAddVisorInput(prevState => ({ ...prevState, visorKey, label }))
@@ -78,13 +56,7 @@ function useAddVisor(): UseAddVisor {
           visorKey: e.target.value,
         })),
     }),
-    [
-      addVisorInput.visorKey,
-      addVisorInput.label,
-      checkIsVisorAlreadySaved,
-      dispatch,
-      toast,
-    ]
+    [addVisorInput.label, addVisorInput.visorKey, dispatch]
   )
 
   return { addVisorInput, handlers }
