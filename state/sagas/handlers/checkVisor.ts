@@ -25,9 +25,7 @@ export function* handleCheckVisor({ payload }) {
       )
       yield put(
         createToast({
-          title: 'Visor not found',
-          status: 'error',
-          isClosable: true,
+          ...payload.notFoundToast,
         })
       )
       return

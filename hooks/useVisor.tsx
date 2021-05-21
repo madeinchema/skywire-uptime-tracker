@@ -66,7 +66,7 @@ function useVisor(): UseVisor {
         dispatch(
           checkVisor({
             visorKey,
-            notFound: {
+            notFoundToast: {
               title: 'Visor not found!',
               status: 'error',
               isClosable: true,
