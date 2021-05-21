@@ -9,7 +9,7 @@ import useVisor from './useVisor'
  * Types
  */
 interface AddVisorInput {
-  key: string
+  visorKey: string
   label: string
   error: string | undefined
 }
@@ -18,7 +18,7 @@ interface UseAddVisor {
   addVisorInput: AddVisorInput
   handlers: {
     addNewVisor: () => void
-    submitLabel: (key: VisorKey, label: string) => void
+    submitLabel: (visorKey: VisorKey, label: string) => void
     handleKeyInput: (e: React.ChangeEvent<HTMLInputElement>) => void
   }
 }
@@ -28,7 +28,7 @@ interface UseAddVisor {
  */
 function useAddVisor(): UseAddVisor {
   const initialInputValuesState = useMemo(
-    () => ({ key: '', label: 'Visor', error: undefined }),
+    () => ({ visorKey: '', label: 'Visor', error: undefined }),
     []
   )
   const [addVisorInput, setAddVisorInput] = useState<AddVisorInput>(
@@ -46,10 +46,12 @@ function useAddVisor(): UseAddVisor {
   const handlers = useMemo(
     () => ({
       addNewVisor: (): void => {
-        const isVisorAlreadySaved = checkIsVisorAlreadySaved(addVisorInput.key)
+        const isVisorAlreadySaved = checkIsVisorAlreadySaved(
+          addVisorInput.visorKey
+        )
         if (isVisorAlreadySaved) {
           const error = 'This visor is already in your list.'
-          setAddVisorInput((prevState) => ({
+          setAddVisorInput(prevState => ({
             ...prevState,
             error,
           }))
@@ -60,21 +62,24 @@ function useAddVisor(): UseAddVisor {
           })
         } else {
           dispatch(
-            addNewVisor({ key: addVisorInput.key, label: addVisorInput.label })
+            addNewVisor({
+              visorKey: addVisorInput.visorKey,
+              label: addVisorInput.label,
+            })
           )
         }
       },
-      submitLabel: (key: VisorKey, label: string): void => {
-        setAddVisorInput((prevState) => ({ ...prevState, key, label }))
+      submitLabel: (visorKey: VisorKey, label: string): void => {
+        setAddVisorInput(prevState => ({ ...prevState, visorKey, label }))
       },
       handleKeyInput: (e: React.ChangeEvent<HTMLInputElement>): void =>
-        setAddVisorInput((prevState) => ({
+        setAddVisorInput(prevState => ({
           ...prevState,
-          key: e.target.value,
+          visorKey: e.target.value,
         })),
     }),
     [
-      addVisorInput.key,
+      addVisorInput.visorKey,
       addVisorInput.label,
       checkIsVisorAlreadySaved,
       dispatch,

@@ -36,7 +36,7 @@ function AddVisor(): JSX.Element {
               <Text>Public key</Text>
               <Input
                 name="key"
-                value={addVisorInput?.key}
+                value={addVisorInput?.visorKey}
                 onChange={handleKeyInput}
               />
             </Flex>
@@ -45,7 +45,7 @@ function AddVisor(): JSX.Element {
                 w="100%"
                 variant="outline"
                 colorScheme="blue"
-                onClick={() => checkVisorStatus(addVisorInput.key)}
+                onClick={() => checkVisorStatus(addVisorInput.visorKey)}
               >
                 Check status
               </Button>
@@ -58,7 +58,7 @@ function AddVisor(): JSX.Element {
             {visorData?.data && (
               <VisorCard
                 visor={{
-                  key: visorData.data.key,
+                  visorKey: visorData.data.visorKey,
                   uptime: visorData.data.uptime,
                   downtime: visorData.data.downtime,
                   percentage: visorData.data.percentage,

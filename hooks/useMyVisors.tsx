@@ -26,8 +26,8 @@ interface MyVisors {
 interface UseMyVisors {
   myVisors: MyVisors
   handlers: {
-    updateVisorLabel: (key: VisorKey, label: VisorLabel) => void
-    removeVisor: (key: VisorKey) => void
+    updateVisorLabel: (visorKey: VisorKey, label: VisorLabel) => void
+    removeVisor: (visorKey: VisorKey) => void
   }
 }
 
@@ -87,15 +87,15 @@ function useMyVisors(): UseMyVisors {
    */
   useEffect(() => {
     const visorKeysToMatch = myVisorsSelector.map(
-      (myVisor: MyVisor) => myVisor.key
+      (myVisor: MyVisor) => myVisor.visorKey
     )
     const matchingVisors = visorsSelector.filter((visor: VisorUptime) =>
-      visorKeysToMatch.includes(visor.key)
+      visorKeysToMatch.includes(visor.visorKey)
     )
     const myVisorsUptimesWithLabels = matchingVisors.map(
       (visor: VisorUptime) => {
         const myVisorToUpdate = myVisorsSelector.find(
-          (myVisor: MyVisor) => myVisor.key === visor.key
+          (myVisor: MyVisor) => myVisor.visorKey === visor.visorKey
         )
         return myVisorToUpdate && { ...visor, label: myVisorToUpdate.label }
       }
@@ -129,11 +129,11 @@ function useMyVisors(): UseMyVisors {
    */
   const handlers = React.useMemo(
     () => ({
-      updateVisorLabel: (key: VisorKey, label: VisorLabel) => {
-        dispatch(updateVisorLabel({ key, label }))
+      updateVisorLabel: (visorKey: VisorKey, label: VisorLabel) => {
+        dispatch(updateVisorLabel({ visorKey, label }))
       },
-      removeVisor: (key: VisorKey) => {
-        dispatch(removeVisor({ key }))
+      removeVisor: (visorKey: VisorKey) => {
+        dispatch(removeVisor({ visorKey }))
       },
     }),
     [dispatch]

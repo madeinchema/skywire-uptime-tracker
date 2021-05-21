@@ -17,10 +17,10 @@ export interface VisorData {
 interface UseVisor {
   visorData: VisorData
   handlers: {
-    canFindVisor: (key: VisorKey) => boolean
-    checkVisorStatus: (key: VisorKey) => void
-    checkIsVisorAlreadySaved: (key: VisorKey) => boolean
-    updateVisorLabel: (label: VisorLabel, key: VisorKey) => void
+    canFindVisor: (visorKey: VisorKey) => boolean
+    checkVisorStatus: (visorKey: VisorKey) => void
+    checkIsVisorAlreadySaved: (visorKey: VisorKey) => boolean
+    updateVisorLabel: (label: VisorLabel, visorKey: VisorKey) => void
   }
 }
 
@@ -56,23 +56,32 @@ function useVisor(): UseVisor {
    */
   const handlers = React.useMemo(
     () => ({
-      canFindVisor: (key: VisorKey): boolean => {
+      canFindVisor: (visorKey: VisorKey): boolean => {
         const visorDataFound = visorsSelector?.find(
-          (visor: VisorUptime) => visor.key === key
+          (visor: VisorUptime) => visor.visorKey === visorKey
         )
         return !!visorDataFound
       },
-      checkVisorStatus: (key: VisorKey): void => {
-        dispatch(checkVisor(key))
+      checkVisorStatus: (visorKey: VisorKey): void => {
+        dispatch(
+          checkVisor({
+            visorKey,
+            notFound: {
+              title: 'Visor not found!',
+              status: 'error',
+              isClosable: true,
+            },
+          })
+        )
       },
-      checkIsVisorAlreadySaved: (key: VisorKey) => {
+      checkIsVisorAlreadySaved: (visorKey: VisorKey) => {
         const canFindVisor = myVisorsSelector.find(
-          (visor: MyVisor) => visor.key === key
+          (visor: MyVisor) => visor.visorKey === visorKey
         )
         return !!canFindVisor
       },
-      updateVisorLabel: (label: VisorLabel, key: VisorKey): void => {
-        dispatch(updateVisorLabel({ key, label }))
+      updateVisorLabel: (label: VisorLabel, visorKey: VisorKey): void => {
+        dispatch(updateVisorLabel({ visorKey, label }))
       },
     }),
     [dispatch, myVisorsSelector, visorsSelector]

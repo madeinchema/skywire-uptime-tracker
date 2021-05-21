@@ -22,7 +22,7 @@ interface AddNewVisorAction {
 interface UpdateVisorAction {
   type: string
   payload: {
-    key: VisorKey
+    visorKey: VisorKey
     label: VisorLabel
   }
 }
@@ -37,30 +37,33 @@ export const myVisorsSlice = createSlice({
     saveMyVisorsData: (state, action) => {
       state.visors = action.payload
     },
-    addNewVisor: (state, { payload: { key, label } }: AddNewVisorAction) => {
+    addNewVisor: (
+      state,
+      { payload: { visorKey, label } }: AddNewVisorAction
+    ) => {
       const newVisor = {
-        key,
+        visorKey,
         label: label || 'Visor',
       }
       state.visors = [...state.visors, newVisor]
     },
     updateVisorLabel: (
       state,
-      { payload: { key, label } }: UpdateVisorAction
+      { payload: { visorKey, label } }: UpdateVisorAction
     ) => {
       const canFindVisorToUpdate = state.visors.find(
-        (visor) => visor.key === key
+        visor => visor.visorKey === visorKey
       )
       if (canFindVisorToUpdate) {
-        const updatedVisor = { label, key }
-        const updatedVisorsList = state.visors.map((visor) =>
-          visor.key === key ? updatedVisor : visor
+        const updatedVisor = { label, visorKey }
+        const updatedVisorsList = state.visors.map(visor =>
+          visor.visorKey === visorKey ? updatedVisor : visor
         )
         state.visors = updatedVisorsList
       }
     },
-    removeVisor: (state, { payload: { key } }) => {
-      state.visors = state.visors.filter((visor) => visor.key !== key)
+    removeVisor: (state, { payload: { visorKey } }) => {
+      state.visors = state.visors.filter(visor => visor.visorKey !== visorKey)
     },
   },
 })

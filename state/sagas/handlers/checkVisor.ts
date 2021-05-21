@@ -5,7 +5,9 @@ import { createToast } from '../../slices/toastsSlice'
 export function* handleCheckVisor({ payload }) {
   try {
     const visorsData = yield select(state => state.visors.data)
-    const visorFound = yield visorsData.find(visor => visor.key === payload)
+    const visorFound = yield visorsData.find(
+      visor => visor.visorKey === payload.visorKey
+    )
     yield put(
       setCheckedVisor({
         loading: true,

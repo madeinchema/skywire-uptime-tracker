@@ -29,7 +29,7 @@ const URLGenerator = (): JSX.Element => {
   const getVisorsURL = useCallback((): string => {
     const BASE_URL = `${config.SITE_URL}/?`
     const visorsQueryString = myVisorsSelector
-      .map((visor) => `${visor.label}=${visor.key}`)
+      .map(visor => `${visor.label}=${visor.visorKey}`)
       .join('&')
     return BASE_URL + visorsQueryString
   }, [myVisorsSelector])

@@ -2,12 +2,12 @@ export type VisorKey = string
 export type VisorLabel = string
 
 export type MyVisor = {
-  key: VisorKey
+  visorKey: VisorKey
   label: VisorLabel
 }
 
 export type VisorUptime = {
-  key: VisorKey
+  visorKey: VisorKey
   uptime: number
   downtime: number
   percentage: number
