@@ -5,11 +5,17 @@ import { VisorKey, MyVisor, VisorLabel } from '../../interfaces/index'
  * State
  */
 type MyVisorsState = {
-  visors: MyVisor[]
+  data: MyVisor[]
+  loading: boolean
+  success: boolean | undefined
+  error: string | undefined
 }
 
 const initialState: MyVisorsState | [] = {
-  visors: [],
+  data: [],
+  loading: false,
+  success: false,
+  error: undefined,
 }
 
 /**
@@ -34,8 +40,9 @@ export const myVisorsSlice = createSlice({
   name: 'myVisors',
   initialState,
   reducers: {
+    addMyVisors() {},
     saveMyVisorsData: (state, action) => {
-      state.visors = action.payload
+      state.data = action.payload
     },
     addNewVisor: (
       state,
@@ -45,30 +52,31 @@ export const myVisorsSlice = createSlice({
         visorKey,
         label: label || 'Visor',
       }
-      state.visors = [...state.visors, newVisor]
+      state.data = [...state.data, newVisor]
     },
     updateVisorLabel: (
       state,
       { payload: { visorKey, label } }: UpdateVisorAction
     ) => {
-      const canFindVisorToUpdate = state.visors.find(
+      const canFindVisorToUpdate = state.data.find(
         visor => visor.visorKey === visorKey
       )
       if (canFindVisorToUpdate) {
         const updatedVisor = { label, visorKey }
-        const updatedVisorsList = state.visors.map(visor =>
+        const updatedVisorsList = state.data.map(visor =>
           visor.visorKey === visorKey ? updatedVisor : visor
         )
-        state.visors = updatedVisorsList
+        state.data = updatedVisorsList
       }
     },
     removeVisor: (state, { payload: { visorKey } }) => {
-      state.visors = state.visors.filter(visor => visor.visorKey !== visorKey)
+      state.data = state.data.filter(visor => visor.visorKey !== visorKey)
     },
   },
 })
 
 export const {
+  addMyVisors,
   addNewVisor,
   saveMyVisorsData,
   updateVisorLabel,

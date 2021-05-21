@@ -38,7 +38,7 @@ function useVisor(): UseVisor {
     (state: RootStateOrAny) => state.visors.data
   )
   const myVisorsSelector = useSelector(
-    (state: RootStateOrAny) => state.myVisors.visors
+    (state: RootStateOrAny) => state.myVisors.data
   )
   const checkedVisorSelector = useSelector(
     (state: RootStateOrAny) => state.checkedVisor
