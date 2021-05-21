@@ -1,6 +1,7 @@
-import { fork, spawn, takeLatest } from 'redux-saga/effects'
-import { handleCheckVisor } from './handlers/checkVisor'
+import { spawn, takeLatest } from 'redux-saga/effects'
+
 import { checkVisor } from '../slices/checkVisorSlice'
+import { handleCheckVisor } from './handlers/checkVisor'
 import { addMyVisors } from '../slices/myVisorsSlice'
 import { handleAddMyVisors } from './handlers/myVisors'
 

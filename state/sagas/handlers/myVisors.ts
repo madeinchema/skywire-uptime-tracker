@@ -5,18 +5,35 @@ import { createToast } from '../../slices/toastsSlice'
 export function* handleAddMyVisors({ payload }) {
   try {
     const visorsData = yield select(state => state.visors.data)
+    const myVisorsData = yield select(state => state.myVisors.data)
+    const payloadArray = Array.isArray(payload) ? payload : [payload]
 
     yield all(
-      payload.map(myVisorData => {
-        const canFindVisorData = visorsData.find(
+      payloadArray.map(myVisorData => {
+        const isVisorFound = visorsData.find(
           visorData => visorData.visorKey === myVisorData.visorKey
         )
-        if (!canFindVisorData) {
+        const isVisorAlreadySaved =
+          isVisorFound &&
+          myVisorsData.find(
+            myVisor => myVisor.visorKey === isVisorFound.visorKey
+          )
+
+        if (!isVisorFound) {
           return put(
             createToast({
               title: `Could not find visor: ${myVisorData.label}`,
               description: myVisorData.visorKey,
               status: 'error',
+            })
+          )
+        }
+        if (isVisorAlreadySaved) {
+          return put(
+            createToast({
+              title: `This visor was already in your list: ${myVisorData.label}`,
+              description: myVisorData.visorKey,
+              status: 'info',
             })
           )
         }
