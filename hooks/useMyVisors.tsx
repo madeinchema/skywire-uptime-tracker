@@ -1,18 +1,13 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/router'
 import { RootStateOrAny, useDispatch, useSelector } from 'react-redux'
-import {
-  MyVisor,
-  MyVisorUptime,
-  VisorKey,
-  VisorLabel,
-  VisorUptime,
-} from '../interfaces'
+import { MyVisor, MyVisorUptime, VisorKey, VisorLabel } from '../interfaces'
 import {
   updateVisorLabel,
   removeVisor,
   addMyVisors,
 } from '../state/slices/myVisorsSlice'
+import { getMyVisorsUptimes } from '../utils/functions/prepareMyVisorsUptimes'
 
 /**
  * Types
@@ -49,6 +44,7 @@ function useMyVisors(): UseMyVisors {
   const { query: visorsFromQueryString } = useRouter()
   const dispatch = useDispatch()
 
+  /* Get MyVisor[] from URL Query Strings */
   const getVisorsFromURL = useCallback(() => {
     const formattedVisors = Object.keys(visorsFromQueryString).map(
       (visorLabel: VisorLabel) => {
@@ -59,27 +55,11 @@ function useMyVisors(): UseMyVisors {
     return formattedVisors
   }, [visorsFromQueryString])
 
-  const getMyVisorsUptimes = useCallback((): MyVisorUptime[] => {
-    const visorKeysToMatch = myVisorsSelector.map(
-      (myVisor: MyVisor) => myVisor.visorKey
-    )
-    const matchingVisors = visorsSelector.filter((visor: VisorUptime) =>
-      visorKeysToMatch.includes(visor.visorKey)
-    )
-    const myVisorsUptimesWithLabels = matchingVisors.map(
-      (visor: VisorUptime) => {
-        const myVisorToUpdate = myVisorsSelector.find(
-          (myVisor: MyVisor) => myVisor.visorKey === visor.visorKey
-        )
-        return myVisorToUpdate && { ...visor, label: myVisorToUpdate.label }
-      }
-    )
-    const sortedVisors = myVisorsUptimesWithLabels.sort(
-      (a: MyVisorUptime, b: MyVisorUptime) =>
-        a.label.localeCompare(b.label, 'en', { numeric: true })
-    )
-    return sortedVisors
-  }, [myVisorsSelector, visorsSelector])
+  /* Get prepared MyVisorUptime[] (sorted, filtered, transformed...) */
+  const preparedVisorsUptimes = useMemo(
+    () => getMyVisorsUptimes(myVisorsSelector, visorsSelector),
+    [myVisorsSelector, visorsSelector]
+  )
 
   /* Initialize myVisors store */
   useEffect(() => {
@@ -91,13 +71,12 @@ function useMyVisors(): UseMyVisors {
 
   /* Maintain myVisors state updated */
   useEffect(() => {
-    const myVisorsUptimes = getMyVisorsUptimes()
     setMyVisors(prevState => ({
       ...prevState,
-      data: myVisorsUptimes,
+      data: preparedVisorsUptimes,
       isLoading: false,
     }))
-  }, [getMyVisorsUptimes, myVisorsSelector])
+  }, [preparedVisorsUptimes])
 
   /**
    * Handlers
