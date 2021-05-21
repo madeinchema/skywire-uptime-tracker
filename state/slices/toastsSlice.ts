@@ -1,9 +1,8 @@
+import { UseToastOptions } from '@chakra-ui/toast'
 import { createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit'
 
-interface Toast {
-  id: string
-  title: string
-  status: 'info' | 'warning' | 'success' | 'error'
+type Toast = UseToastOptions & {
+  shown: boolean
 }
 
 /**
@@ -30,24 +29,24 @@ export const toastsSlice = createSlice({
   initialState,
   reducers: {
     createToast: {
-      reducer: (
-        state,
-        {
-          payload,
-        }: PayloadAction<{
-          id: string
-          title: string
-          isClosable: boolean
-        }>
-      ) => {
+      reducer: (state, { payload }: PayloadAction<Toast>) => {
         state.data.unshift(payload)
       },
-      prepare: payload => ({
-        payload: {
-          ...payload,
-          id: nanoid(),
-        },
-      }),
+      prepare: payload => {
+        const toastId = nanoid()
+        return {
+          payload: {
+            ...payload,
+            id: toastId,
+            shown: false,
+          },
+        }
+      },
+    },
+    setToastShown: (state, { payload }) => {
+      state.data = state.data.map(toast =>
+        toast.id === payload ? { ...toast, shown: true } : toast
+      )
     },
     removeToast: (state, { payload }) => {
       state.data = state.data.filter(toast => toast.id !== payload)
@@ -55,6 +54,6 @@ export const toastsSlice = createSlice({
   },
 })
 
-export const { createToast, removeToast } = toastsSlice.actions
+export const { createToast, setToastShown, removeToast } = toastsSlice.actions
 
 export default toastsSlice.reducer
