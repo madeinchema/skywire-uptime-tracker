@@ -1,9 +1,5 @@
-import { UseToastOptions } from '@chakra-ui/toast'
 import { createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit'
-
-type Toast = UseToastOptions & {
-  shown: boolean
-}
+import { Toast } from '../../interfaces'
 
 /**
  * State

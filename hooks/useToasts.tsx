@@ -1,6 +1,7 @@
 import { useToast } from '@chakra-ui/toast'
 import { useEffect } from 'react'
 import { RootStateOrAny, useDispatch, useSelector } from 'react-redux'
+import { Toast } from '../interfaces'
 import { removeToast, setToastShown } from '../state/slices/toastsSlice'
 
 const useToasts = (): void => {
@@ -9,7 +10,7 @@ const useToasts = (): void => {
   const toast = useToast()
 
   useEffect(() => {
-    toasts.data.forEach(toastData => {
+    toasts.data.forEach((toastData: Toast) => {
       if (!toastData.shown) {
         toast({
           ...toastData,
