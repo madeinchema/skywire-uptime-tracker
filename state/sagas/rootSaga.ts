@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { spawn, takeLatest } from 'redux-saga/effects'
 
 import { checkVisor } from '../slices/checkVisorSlice'
