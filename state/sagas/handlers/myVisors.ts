@@ -1,4 +1,4 @@
-import { all, put, select } from 'redux-saga/effects'
+import { all, Effect, put, select, StrictEffect } from 'redux-saga/effects'
 import { VisorKey, VisorUptime } from '../../../interfaces'
 import { addMyVisorSuccess } from '../../slices/myVisorsSlice'
 import { createToast } from '../../slices/toastsSlice'
@@ -10,7 +10,9 @@ const checkCanFindVisorByKey = (visorsToCheck, visorKey: VisorKey): boolean => {
   return isVisorDataFound
 }
 
-export function* handleLoadMyVisors({ payload }) {
+export function* handleLoadMyVisors({
+  payload,
+}: Effect): Generator<StrictEffect> {
   // TODO: LocalStorage & URL Query Strings
   try {
     const visorsData = yield select(state => state.visors.data)
