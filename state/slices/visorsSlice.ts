@@ -22,8 +22,8 @@ const initialState: VisorsState = {
 /**
  * Thunks
  */
-const fetchVisorsData = createAsyncThunk('visors/getVisorsData', async () => {
-  const response = await getVisorsList()
+const fetchVisorsData = createAsyncThunk('visors/fetchVisorsData', async () => {
+  const response = await getVisorsList('USE_FAKE_DATA')
   return response
 })
 
