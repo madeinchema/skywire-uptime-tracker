@@ -2,12 +2,9 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/router'
 import { RootStateOrAny, useDispatch, useSelector } from 'react-redux'
 import { MyVisor, MyVisorUptime, VisorKey, VisorLabel } from '../interfaces'
-import {
-  updateVisorLabel,
-  removeVisor,
-  loadMyVisors,
-} from '../state/slices/myVisorsSlice'
+import { updateVisorLabel, removeVisor } from '../state/slices/myVisorsSlice'
 import { getMyVisorsUptimes } from '../utils/functions/prepareMyVisorsUptimes'
+import { loadMyVisors } from '../state/thunks/myVisors/loadMyVisors'
 
 /**
  * Types
@@ -63,8 +60,8 @@ function useMyVisors(): UseMyVisors {
 
   /* Initialize myVisors store */
   useEffect(() => {
-    if (visorsSelector.length > 0) {
-      const visorsFromURL = getVisorsFromURL()
+    const visorsFromURL = getVisorsFromURL()
+    if (visorsSelector.length > 0 && visorsFromURL.length > 0) {
       dispatch(loadMyVisors(visorsFromURL))
     }
   }, [visorsSelector, getVisorsFromURL, dispatch])
