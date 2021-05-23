@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { VisorKey } from '../interfaces'
-import { addMyVisor } from '../state/slices/myVisorsSlice'
+import { addMyVisor } from '../state/thunks/myVisors/addMyVisor'
 
 /**
  * Types
