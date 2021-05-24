@@ -5,7 +5,7 @@ import { getVisorsList } from '../../utils/functions/getVisorsList'
 /**
  * State
  */
-type VisorsState = {
+export type VisorsState = {
   data: VisorUptime[]
   loading: boolean
   success: boolean | undefined

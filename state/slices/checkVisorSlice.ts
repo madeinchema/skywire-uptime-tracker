@@ -4,7 +4,7 @@ import { VisorUptime } from '../../interfaces'
 /**
  * State
  */
-type VisorsState = {
+export type VisorsState = {
   data: VisorUptime[]
   loading: boolean
   success: boolean | undefined

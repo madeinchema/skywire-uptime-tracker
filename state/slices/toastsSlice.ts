@@ -4,7 +4,7 @@ import { Toast } from '../../interfaces'
 /**
  * State
  */
-type ToastsState = {
+export type ToastsState = {
   data: Toast[]
   loading: boolean
   success: boolean | undefined

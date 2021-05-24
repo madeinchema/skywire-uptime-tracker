@@ -7,7 +7,7 @@ import { addMyVisor } from '../thunks/myVisors/addMyVisor'
 /**
  * State
  */
-type MyVisorsState = {
+export type MyVisorsState = {
   data: MyVisor[]
   loading: boolean
   success: boolean | undefined
