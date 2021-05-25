@@ -1,12 +1,12 @@
-import { extendTheme } from '@chakra-ui/react';
-import { mode } from '@chakra-ui/theme-tools';
+import { ChakraProps, extendTheme, ThemeConfig } from '@chakra-ui/react'
+import { mode } from '@chakra-ui/theme-tools'
 
 /**
  * Table component
  */
-const Table = {
+const Table: any = {
   variants: {
-    custom: (props) => ({
+    custom: (props: ChakraProps) => ({
       thead: {
         tr: {
           th: {
@@ -22,12 +22,12 @@ const Table = {
       },
     }),
   },
-};
+}
 
 /**
  * Config
  */
-const config = {
+const config: ThemeConfig = {
   initialColorMode: 'dark',
   useSystemColorMode: false,
 }
@@ -41,12 +41,12 @@ const theme = extendTheme({
     Table,
   },
   styles: {
-    global: (props) => ({
+    global: props => ({
       body: {
         bg: mode('gray.50', 'black')(props),
       },
     }),
   },
-});
+})
 
 export default theme
