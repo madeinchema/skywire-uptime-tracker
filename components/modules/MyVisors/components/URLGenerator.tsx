@@ -5,14 +5,14 @@ import { RootStateOrAny, useSelector } from 'react-redux'
 import { Flex } from '@chakra-ui/layout'
 import { useClipboard } from '@chakra-ui/hooks'
 import { useToast } from '@chakra-ui/toast'
-import { MyVisor } from '../../../../interfaces'
 import config from '../../../../config'
+import { MyVisorsState } from '../../../../state/slices/myVisorsSlice'
 
 const URLGenerator = (): JSX.Element => {
   const [showURL, setShowURL] = useState(false)
   const [generatedURL, setGeneratedURL] = useState<string>('')
-  const myVisorsSelector: MyVisor[] = useSelector(
-    (state: RootStateOrAny) => state.myVisors.visors
+  const myVisorsSelector: MyVisorsState = useSelector(
+    (state: RootStateOrAny) => state.myVisors
   )
   const { onCopy } = useClipboard(generatedURL)
   const toast = useToast()
@@ -28,7 +28,7 @@ const URLGenerator = (): JSX.Element => {
 
   const getVisorsURL = useCallback((): string => {
     const BASE_URL = `${config.SITE_URL}/?`
-    const visorsQueryString = myVisorsSelector
+    const visorsQueryString = myVisorsSelector.data
       .map(visor => `${visor.label}=${visor.visorKey}`)
       .join('&')
     return BASE_URL + visorsQueryString
