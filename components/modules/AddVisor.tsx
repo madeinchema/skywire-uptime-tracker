@@ -8,6 +8,7 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/layout'
+import { Spinner } from '@chakra-ui/spinner'
 import useVisor from '../../hooks/useVisor'
 
 import VisorCard from '../common/VisorCard'
@@ -16,12 +17,21 @@ import useAddVisor from '../../hooks/useAddVisor'
 function AddVisor(): JSX.Element {
   const {
     visorData,
-    handlers: { checkVisorStatus },
+    handlers: { checkVisorStatus, removeCheckedVisor },
   } = useVisor()
   const {
     addVisorInput,
-    handlers: { handleKeyInput, submitLabel, addNewVisor },
+    handlers: { handleKeyInput, submitLabel, addNewVisor, resetInput },
   } = useAddVisor()
+
+  const handleCheckVisorStatus = (): void => {
+    if (visorData?.data) {
+      removeCheckedVisor()
+      resetInput()
+      return
+    }
+    checkVisorStatus(addVisorInput.visorKey)
+  }
 
   return (
     <VStack spacing={4} w="100%">
@@ -36,7 +46,7 @@ function AddVisor(): JSX.Element {
               <Text>Public key</Text>
               <Input
                 name="key"
-                value={addVisorInput?.key}
+                value={addVisorInput?.visorKey}
                 onChange={handleKeyInput}
               />
             </Flex>
@@ -44,10 +54,10 @@ function AddVisor(): JSX.Element {
               <Button
                 w="100%"
                 variant="outline"
-                colorScheme="blue"
-                onClick={() => checkVisorStatus(addVisorInput.key)}
+                colorScheme={visorData?.data ? 'red' : 'blue'}
+                onClick={handleCheckVisorStatus}
               >
-                Check status
+                {visorData?.data ? 'Clear' : 'Check status'}
               </Button>
               <Button w="100%" colorScheme="blue" onClick={addNewVisor}>
                 Add visor
@@ -55,10 +65,15 @@ function AddVisor(): JSX.Element {
             </HStack>
           </VStack>
           <Flex width="100%" justify="center">
+            {visorData?.loading && (
+              <Flex align="center" justify="center" h="86px">
+                <Spinner speed="0.2s" color="blue.500" />
+              </Flex>
+            )}
             {visorData?.data && (
               <VisorCard
                 visor={{
-                  key: visorData.data.key,
+                  visorKey: visorData.data.visorKey,
                   uptime: visorData.data.uptime,
                   downtime: visorData.data.downtime,
                   percentage: visorData.data.percentage,

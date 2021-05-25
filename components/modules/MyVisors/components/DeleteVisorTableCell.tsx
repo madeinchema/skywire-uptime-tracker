@@ -32,7 +32,7 @@ const DeleteVisorTableCell = ({
   const { colorMode } = useColorMode()
 
   const handleVisorRemoval = (): void => {
-    dispatch(removeVisor({ key: visorKey }))
+    dispatch(removeVisor({ visorKey }))
     toast({
       title: 'The visor has been removed.',
       status: 'success',
