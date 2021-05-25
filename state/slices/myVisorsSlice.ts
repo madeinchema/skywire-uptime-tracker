@@ -1,28 +1,33 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { VisorKey, MyVisor, VisorLabel } from '../../interfaces/index'
 
+import { loadMyVisors } from '../thunks/myVisors/loadMyVisors'
+import { addMyVisor } from '../thunks/myVisors/addMyVisor'
+
 /**
  * State
  */
-type MyVisorsState = {
-  visors: MyVisor[]
+export type MyVisorsState = {
+  data: MyVisor[]
+  loading: boolean
+  success: boolean | undefined
+  error: string | undefined
 }
 
 const initialState: MyVisorsState | [] = {
-  visors: [],
+  data: [],
+  loading: false,
+  success: false,
+  error: undefined,
 }
 
 /**
  * Actions' types
  */
-interface AddNewVisorAction {
-  type: string
-  payload: MyVisor
-}
 interface UpdateVisorAction {
   type: string
   payload: {
-    key: VisorKey
+    visorKey: VisorKey
     label: VisorLabel
   }
 }
@@ -34,42 +39,63 @@ export const myVisorsSlice = createSlice({
   name: 'myVisors',
   initialState,
   reducers: {
-    saveMyVisorsData: (state, action) => {
-      state.visors = action.payload
-    },
-    addNewVisor: (state, { payload: { key, label } }: AddNewVisorAction) => {
-      const newVisor = {
-        key,
-        label: label || 'Visor',
-      }
-      state.visors = [...state.visors, newVisor]
-    },
     updateVisorLabel: (
       state,
-      { payload: { key, label } }: UpdateVisorAction
+      { payload: { visorKey, label } }: UpdateVisorAction
     ) => {
-      const canFindVisorToUpdate = state.visors.find(
-        (visor) => visor.key === key
+      const canFindVisorToUpdate = state.data.find(
+        visor => visor.visorKey === visorKey
       )
       if (canFindVisorToUpdate) {
-        const updatedVisor = { label, key }
-        const updatedVisorsList = state.visors.map((visor) =>
-          visor.key === key ? updatedVisor : visor
+        const updatedVisor = { label, visorKey }
+        const updatedVisorsList = state.data.map(visor =>
+          visor.visorKey === visorKey ? updatedVisor : visor
         )
-        state.visors = updatedVisorsList
+        state.data = updatedVisorsList
       }
     },
-    removeVisor: (state, { payload: { key } }) => {
-      state.visors = state.visors.filter((visor) => visor.key !== key)
+    removeVisor: (state, { payload: { visorKey } }) => {
+      state.data = state.data.filter(visor => visor.visorKey !== visorKey)
     },
+  },
+  extraReducers: builder => {
+    builder.addCase(addMyVisor.pending, state => {
+      state.loading = true
+      state.success = undefined
+      state.error = undefined
+    })
+    builder.addCase(addMyVisor.fulfilled, (state, action) => {
+      if (action.payload) {
+        state.data.push(action.payload)
+      }
+      state.loading = false
+      state.success = true
+      state.error = undefined
+    })
+    builder.addCase(addMyVisor.rejected, (state, action) => {
+      state.loading = false
+      state.success = false
+      state.error = action.error.message
+    })
+
+    builder.addCase(loadMyVisors.pending, state => {
+      state.loading = true
+      state.success = undefined
+      state.error = undefined
+    })
+    builder.addCase(loadMyVisors.fulfilled, state => {
+      state.loading = false
+      state.success = true
+      state.error = undefined
+    })
+    builder.addCase(loadMyVisors.rejected, (state, action) => {
+      state.loading = false
+      state.success = false
+      state.error = action.error.message
+    })
   },
 })
 
-export const {
-  addNewVisor,
-  saveMyVisorsData,
-  updateVisorLabel,
-  removeVisor,
-} = myVisorsSlice.actions
+export const { updateVisorLabel, removeVisor } = myVisorsSlice.actions
 
 export default myVisorsSlice.reducer

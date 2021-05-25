@@ -17,12 +17,12 @@ import { getSecsElapsedThisMonth } from '../../utils/functions/getTimeRelatedDat
 
 type VisorCardProps = {
   visor: MyVisorUptime
-  onLabelSubmit?: (value: string, key: VisorKey) => void
+  onLabelSubmit?: (value: string, visorKey: VisorKey) => void
 }
 
 const VisorCard = ({ visor, onLabelSubmit }: VisorCardProps): JSX.Element => {
   const toast = useToast()
-  const { onCopy } = useClipboard(visor.key)
+  const { onCopy } = useClipboard(visor.visorKey)
   const { colorMode } = useColorMode()
 
   const totalSecondsElapsedThisMonth = getSecsElapsedThisMonth()
@@ -52,7 +52,7 @@ const VisorCard = ({ visor, onLabelSubmit }: VisorCardProps): JSX.Element => {
   )
 
   const handleLabelSubmit = (newLabel: VisorLabel): void => {
-    if (onLabelSubmit) onLabelSubmit(visor.key, newLabel)
+    if (onLabelSubmit) onLabelSubmit(visor.visorKey, newLabel)
   }
 
   return (
@@ -110,7 +110,7 @@ const VisorCard = ({ visor, onLabelSubmit }: VisorCardProps): JSX.Element => {
           wordBreak="break-all"
           onClick={handleCopyVisorKey}
         >
-          {visor.key}
+          {visor.visorKey}
         </Text>
       </Flex>
     </VStack>

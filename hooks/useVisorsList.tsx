@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { RootStateOrAny, useDispatch, useSelector } from 'react-redux'
 import { VisorUptime } from '../interfaces'
-import { saveVisorsData } from '../state/slices/visorsSlice'
-import { getVisorsList } from '../utils/functions/getVisorsList'
+import { fetchVisorsData } from '../state/slices/visorsSlice'
 
 /**
  * Types
@@ -44,9 +43,7 @@ function useVisorsList(): UseVisorsList {
     if (shouldGetVisors) {
       // TODO: Remember to remove this setTimeout later
       setTimeout(() => {
-        getVisorsList('USE_FAKE_DATA').then((data) =>
-          dispatch(saveVisorsData(data))
-        )
+        dispatch(fetchVisorsData())
       }, 1000)
     }
   }, [dispatch, visorsSelector.length])
@@ -57,7 +54,7 @@ function useVisorsList(): UseVisorsList {
   useEffect(() => {
     const shouldSetVisors = visorsSelector.length > 0
     if (shouldSetVisors) {
-      setVisorsList((prevState) => ({
+      setVisorsList(prevState => ({
         ...prevState,
         data: visorsSelector,
         isLoading: false,
@@ -71,7 +68,7 @@ function useVisorsList(): UseVisorsList {
   const handlers = React.useMemo(
     () => ({
       toggleShowVisorsList: () =>
-        setVisorsList((prevState) => ({
+        setVisorsList(prevState => ({
           ...prevState,
           isHidden: !prevState.isHidden,
         })),

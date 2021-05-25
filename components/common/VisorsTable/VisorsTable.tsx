@@ -32,7 +32,7 @@ type DataSource = VisorUptime[] | MyVisorUptime[]
 
 interface VisorsTableProps {
   dataSource: DataSource | undefined
-  onLabelSubmit?: (key: VisorKey, label: VisorLabel) => void
+  onLabelSubmit?: (visorKey: VisorKey, label: VisorLabel) => void
 }
 
 const VisorsTable = ({
@@ -41,7 +41,7 @@ const VisorsTable = ({
 }: VisorsTableProps): JSX.Element => {
   const areVisorsWithLabel = (
     dataToCheck: DataSource
-  ): dataToCheck is DataSource => dataToCheck.some((visor) => 'label' in visor)
+  ): dataToCheck is DataSource => dataToCheck.some(visor => 'label' in visor)
   const totalSecondsElapsedThisMonth = getSecsElapsedThisMonth()
 
   return (
@@ -78,7 +78,7 @@ const VisorsTable = ({
                 }
 
                 return (
-                  <Tr key={visor.key} fontWeight={500}>
+                  <Tr key={visor.visorKey} fontWeight={500}>
                     <Td>
                       <Box
                         width={3}
@@ -93,8 +93,9 @@ const VisorsTable = ({
                         <Editable
                           fontWeight="700"
                           defaultValue={visor.label}
-                          onSubmit={(value) =>
-                            onLabelSubmit && onLabelSubmit(visor.key, value)
+                          onSubmit={value =>
+                            onLabelSubmit &&
+                            onLabelSubmit(visor.visorKey, value)
                           }
                         >
                           <EditablePreview />
@@ -102,13 +103,13 @@ const VisorsTable = ({
                         </Editable>
                       </Td>
                     )}
-                    <VisorKeyTableCell visorKey={visor.key} />
+                    <VisorKeyTableCell visorKey={visor.visorKey} />
                     <Td isNumeric>{formattedVisorData.percentage}</Td>
                     <Td isNumeric>{formattedVisorData.uptime}</Td>
                     <Td isNumeric>{formattedVisorData.downtime}</Td>
                     <Td isNumeric>{formattedVisorData.health}</Td>
                     {isMyVisor(visor) && (
-                      <DeleteVisorTableCell visorKey={visor.key} />
+                      <DeleteVisorTableCell visorKey={visor.visorKey} />
                     )}
                   </Tr>
                 )
