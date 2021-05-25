@@ -1,16 +1,13 @@
-import { VisorKey, VisorUptime } from '../../interfaces'
+import { MyVisor, VisorKey, VisorUptime } from '../../interfaces'
 
 const findVisorByKey = (
-  visorsToCheck: VisorUptime[],
+  visorsToCheck: VisorUptime[] | MyVisor[],
   visorKey: VisorKey
-): Promise<boolean | VisorUptime> => {
-  return new Promise(resolve => {
-    const visorDataFound = visorsToCheck.find(
-      (visor: VisorUptime) => visor.visorKey === visorKey
-    )
-    if (!visorDataFound) return resolve(false)
-    return resolve(visorDataFound)
-  })
+): undefined | VisorUptime | MyVisor => {
+  const visorDataFound = (visorsToCheck as Array<VisorUptime | MyVisor>).find(
+    (visor: VisorUptime | MyVisor) => visor.visorKey === visorKey
+  )
+  return visorDataFound
 }
 
 export { findVisorByKey }
