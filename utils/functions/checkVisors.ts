@@ -1,13 +1,23 @@
 import { MyVisor, VisorKey, VisorUptime } from '../../interfaces'
 
-const findVisorByKey = (
+const getVisorUptimeByKey = (
+  visorsToCheck: VisorUptime[],
+  visorKey: VisorKey
+): undefined | VisorUptime => {
+  const visorDataFound = (visorsToCheck as Array<VisorUptime>).find(
+    (visor: VisorUptime) => visor.visorKey === visorKey
+  )
+  return visorDataFound
+}
+
+const checkCanFindVisorByKey = (
   visorsToCheck: VisorUptime[] | MyVisor[],
   visorKey: VisorKey
-): undefined | VisorUptime | MyVisor => {
-  const visorDataFound = (visorsToCheck as Array<VisorUptime | MyVisor>).find(
+): boolean => {
+  const visorDataFound = (visorsToCheck as Array<VisorUptime | MyVisor>).some(
     (visor: VisorUptime | MyVisor) => visor.visorKey === visorKey
   )
   return visorDataFound
 }
 
-export { findVisorByKey }
+export { getVisorUptimeByKey, checkCanFindVisorByKey }

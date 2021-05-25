@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { MyVisor } from '../../../interfaces'
-import { findVisorByKey } from '../../../utils/functions/checkVisors'
+import { checkCanFindVisorByKey } from '../../../utils/functions/checkVisors'
 import { createToast } from '../../slices/toastsSlice'
 import { VisorsState } from '../../slices/visorsSlice'
 import { MyVisorsState } from '../../slices/myVisorsSlice'
@@ -13,7 +13,7 @@ export const addMyVisor = createAsyncThunk(
       myVisors: { data: myVisorsData },
     } = (await getState()) as { visors: VisorsState; myVisors: MyVisorsState }
 
-    const visorFound = findVisorByKey(visorsData, myVisor.visorKey)
+    const visorFound = checkCanFindVisorByKey(visorsData, myVisor.visorKey)
     if (!visorFound) {
       dispatch(
         createToast({
@@ -25,7 +25,10 @@ export const addMyVisor = createAsyncThunk(
       throw new Error('Visor not found')
     }
 
-    const isVisorAlreadySaved = findVisorByKey(myVisorsData, myVisor.visorKey)
+    const isVisorAlreadySaved = checkCanFindVisorByKey(
+      myVisorsData,
+      myVisor.visorKey
+    )
     if (isVisorAlreadySaved) {
       dispatch(
         createToast({
