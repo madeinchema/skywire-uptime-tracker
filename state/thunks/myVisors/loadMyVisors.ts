@@ -1,5 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { MyVisor } from '../../../interfaces'
+import { createToast } from '../../slices/toastsSlice'
 import { addMyVisor } from './addMyVisor'
 
 export const loadMyVisors = createAsyncThunk(
@@ -10,6 +11,15 @@ export const loadMyVisors = createAsyncThunk(
     ).map(visorKey =>
       visorsToLoad.find(visorToLoad => visorToLoad.visorKey === visorKey)
     )
+
+    if (uniqueLoadedVisors.length > 0) {
+      dispatch(
+        createToast({
+          title: `Your have successfully loaded your visors.`,
+          status: 'info',
+        })
+      )
+    }
 
     uniqueLoadedVisors.forEach(async uniqueVisorFromUrl => {
       if (uniqueVisorFromUrl) {
