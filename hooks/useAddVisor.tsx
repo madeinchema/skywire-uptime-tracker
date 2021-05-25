@@ -18,6 +18,7 @@ interface UseAddVisor {
     addNewVisor: () => void
     submitLabel: (visorKey: VisorKey, label: string) => void
     handleKeyInput: (e: React.ChangeEvent<HTMLInputElement>) => void
+    resetInput: () => void
   }
 }
 
@@ -55,8 +56,14 @@ function useAddVisor(): UseAddVisor {
           ...prevState,
           visorKey: e.target.value,
         })),
+      resetInput: (): void => setAddVisorInput(initialInputValuesState),
     }),
-    [addVisorInput.label, addVisorInput.visorKey, dispatch]
+    [
+      addVisorInput.label,
+      addVisorInput.visorKey,
+      dispatch,
+      initialInputValuesState,
+    ]
   )
 
   return { addVisorInput, handlers }
