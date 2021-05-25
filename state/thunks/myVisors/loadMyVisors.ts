@@ -11,15 +11,15 @@ export const loadMyVisors = createAsyncThunk(
       visorsToLoad.find(visorToLoad => visorToLoad.visorKey === visorKey)
     )
 
-    if (uniqueLoadedVisors.length > 0) {
-      uniqueLoadedVisors.forEach(async uniqueVisorFromUrl => {
+    uniqueLoadedVisors.forEach(async uniqueVisorFromUrl => {
+      if (uniqueVisorFromUrl) {
         dispatch(
           addMyVisor({
             visorKey: uniqueVisorFromUrl.visorKey,
             label: uniqueVisorFromUrl.label,
           })
         )
-      })
-    }
+      }
+    })
   }
 )
