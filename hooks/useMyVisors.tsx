@@ -52,12 +52,6 @@ function useMyVisors(): UseMyVisors {
     return formattedVisors
   }, [visorsFromQueryString])
 
-  /* Get prepared MyVisorUptime[] (sorted, filtered, transformed...) */
-  const preparedVisorsUptimes = useMemo(
-    () => getMyVisorsUptimes(myVisorsSelector, visorsSelector),
-    [myVisorsSelector, visorsSelector]
-  )
-
   /* Initialize myVisors store */
   useEffect(() => {
     const visorsFromURL = getVisorsFromURL()
@@ -66,14 +60,17 @@ function useMyVisors(): UseMyVisors {
     }
   }, [visorsSelector, getVisorsFromURL, dispatch])
 
+  /* Get prepared MyVisorUptime[] (sorted, filtered, transformed...) */
   /* Maintain myVisors state updated */
   useEffect(() => {
-    setMyVisors(prevState => ({
-      ...prevState,
-      data: preparedVisorsUptimes,
-      isLoading: false,
-    }))
-  }, [preparedVisorsUptimes])
+    getMyVisorsUptimes(myVisorsSelector, visorsSelector).then(visorsUptimes =>
+      setMyVisors(prevState => ({
+        ...prevState,
+        data: visorsUptimes,
+        isLoading: false,
+      }))
+    )
+  }, [myVisorsSelector, visorsSelector])
 
   /**
    * Handlers
