@@ -9,7 +9,7 @@ type VisorUptimeDataFromAPI = (Omit<VisorUptime, 'visorKey'> & {
 function formatVisorUptimeDataFromApi(
   data: VisorUptimeDataFromAPI
 ): VisorUptime[] {
-  return data.map(item => {
+  const formattedData: VisorUptime[] = data.map(item => {
     const { key, ...restItem } = item
     const formattedItem = {
       ...restItem,
@@ -17,6 +17,7 @@ function formatVisorUptimeDataFromApi(
     }
     return formattedItem
   })
+  return formattedData
 }
 
 const getVisorsList = async (): Promise<VisorUptime[]> => {
