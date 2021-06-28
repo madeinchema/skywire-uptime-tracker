@@ -1,34 +1,37 @@
-import { MyVisor, VisorUptime } from '../../interfaces'
-import sampleMyVisorsData from '../sample-my-visors-data'
+import config from '../../config'
+import { VisorKey, VisorUptime } from '../../interfaces'
 import sampleVisorsUptimeData from '../sample-visors-uptime-data'
 
-type UseFakeData = 'USE_FAKE_DATA'
+type VisorUptimeDataFromAPI = (Omit<VisorUptime, 'visorKey'> & {
+  key: VisorKey
+})[]
 
-const getVisorsList = async (
-  useFakeData?: UseFakeData
-): Promise<VisorUptime[]> => {
-  if (useFakeData === 'USE_FAKE_DATA') {
-    return new Promise(res => {
-      res(sampleVisorsUptimeData)
-    })
-  }
-  const visorsList = await fetch('http://localhost:8080/visors', {
-    headers: { 'Content-Type': 'application/json' },
-  }).then(res => res.json())
-  return visorsList
-}
-
-const getMyVisorsList = async (
-  useFakeData: UseFakeData
-): Promise<MyVisor[]> => {
-  if (useFakeData === 'USE_FAKE_DATA') {
-    return new Promise(res => {
-      res(sampleMyVisorsData)
-    })
-  }
-  return new Promise(res => {
-    res(sampleMyVisorsData)
+function formatVisorUptimeDataFromApi(
+  data: VisorUptimeDataFromAPI
+): VisorUptime[] {
+  return data.map(item => {
+    const { key, ...restItem } = item
+    const formattedItem = {
+      ...restItem,
+      visorKey: item.key,
+    }
+    return formattedItem
   })
 }
 
-export { getVisorsList, getMyVisorsList }
+const getVisorsList = async (): Promise<VisorUptime[]> => {
+  if (config.FAKE_DATA) {
+    return new Promise(res => {
+      const formattedData = formatVisorUptimeDataFromApi(sampleVisorsUptimeData)
+      res(formattedData)
+    })
+  }
+  const visorsList = await fetch(`${config.API_URL}/visors`, {
+    headers: { 'Content-Type': 'application/json' },
+  })
+    .then(res => res.json())
+    .then(data => formatVisorUptimeDataFromApi(data))
+  return visorsList
+}
+
+export { getVisorsList }
