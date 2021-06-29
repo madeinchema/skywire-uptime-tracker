@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { RootStateOrAny, useDispatch, useSelector } from 'react-redux'
 import { MyVisor, MyVisorUptime, VisorKey, VisorLabel } from '../interfaces'
@@ -41,21 +41,23 @@ function useMyVisors(): UseMyVisors {
   const { query: visorsFromQueryString } = useRouter()
   const dispatch = useDispatch()
 
-  /* Get MyVisor[] from URL Query Strings */
-  const getVisorsFromURL = useCallback(() => {
-    const formattedVisors = Object.keys(visorsFromQueryString).map(
-      (visorLabel: VisorLabel) => {
-        const visorKey = visorsFromQueryString[visorLabel]
-        return { label: visorLabel, visorKey } as MyVisor
-      }
-    )
-    return formattedVisors
-  }, [visorsFromQueryString])
-
-  /* Get prepared MyVisorUptime[] (sorted, filtered, transformed...) */
-  const preparedVisorsUptimes = useMemo(
-    () => getMyVisorsUptimes(myVisorsSelector, visorsSelector),
-    [myVisorsSelector, visorsSelector]
+  // Get and format MyVisor[] from URL Query Strings
+  const getVisorsFromURL = useCallback(
+    () =>
+      Object.entries(visorsFromQueryString).reduce<MyVisor[]>((acc, cur) => {
+        const label = cur[0]
+        const visorKey = cur[1]
+        // Handle: If labels are duplicated, visorKey is array of keys
+        if (Array.isArray(visorKey)) {
+          visorKey.forEach(key => {
+            acc.push({ label, visorKey: key })
+          })
+          return acc
+        }
+        acc.push({ label, visorKey })
+        return acc
+      }, []),
+    [visorsFromQueryString]
   )
 
   /* Initialize myVisors store */
@@ -66,14 +68,17 @@ function useMyVisors(): UseMyVisors {
     }
   }, [visorsSelector, getVisorsFromURL, dispatch])
 
+  /* Get prepared MyVisorUptime[] (sorted, filtered, transformed...) */
   /* Maintain myVisors state updated */
   useEffect(() => {
-    setMyVisors(prevState => ({
-      ...prevState,
-      data: preparedVisorsUptimes,
-      isLoading: false,
-    }))
-  }, [preparedVisorsUptimes])
+    getMyVisorsUptimes(myVisorsSelector, visorsSelector).then(visorsUptimes =>
+      setMyVisors(prevState => ({
+        ...prevState,
+        data: visorsUptimes,
+        isLoading: false,
+      }))
+    )
+  }, [myVisorsSelector, visorsSelector])
 
   /**
    * Handlers

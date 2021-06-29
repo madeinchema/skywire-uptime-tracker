@@ -15,7 +15,7 @@ export const loadMyVisors = createAsyncThunk(
     if (uniqueLoadedVisors.length > 0) {
       dispatch(
         createToast({
-          title: `Your have successfully loaded your visors.`,
+          title: `Loading visors from URL.`,
           status: 'info',
         })
       )
