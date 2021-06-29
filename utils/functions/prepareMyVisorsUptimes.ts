@@ -1,24 +1,28 @@
 import { MyVisor, MyVisorUptime, VisorUptime } from '../../interfaces'
 
-const getMyVisorsUptimes = (
+const getMyVisorsUptimes = async (
   myVisors: MyVisor[],
   visors: VisorUptime[]
-): MyVisorUptime[] => {
-  const matchingVisors = visors.filter((visor: VisorUptime) => {
-    const matchingVisor = myVisors.find(
-      myVisor => myVisor.visorKey === visor.visorKey
+): Promise<MyVisorUptime[]> => {
+  return new Promise(res => {
+    const myVisorUptimes: MyVisorUptime[] = myVisors.map(myVisor => {
+      const matchingVisor = visors.find(
+        visor => visor.visorKey === myVisor.visorKey
+      )
+      if (!matchingVisor) throw new Error('Could not find matching visor.')
+      return (
+        matchingVisor && {
+          ...matchingVisor,
+          label: myVisor.label,
+        }
+      )
+    })
+
+    const sortedVisors = myVisorUptimes.sort(
+      (a: MyVisorUptime, b: MyVisorUptime) =>
+        a.label.localeCompare(b.label, 'en', { numeric: true })
     )
-    if (!matchingVisor?.visorKey) {
-      return false
-    }
-    return { ...visor, label: matchingVisor.label }
-  }) as MyVisorUptime[]
-
-  const sortedVisors = matchingVisors.sort(
-    (a: MyVisorUptime, b: MyVisorUptime) =>
-      a.label.localeCompare(b.label, 'en', { numeric: true })
-  )
-  return sortedVisors
+    res(sortedVisors)
+  })
 }
-
 export { getMyVisorsUptimes }
