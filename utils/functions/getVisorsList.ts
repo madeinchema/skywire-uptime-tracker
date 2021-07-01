@@ -27,7 +27,7 @@ const getVisorsList = async (): Promise<VisorUptime[]> => {
       res(formattedData)
     })
   }
-  const visorsList = await fetch(`http://${config.API_URL}/visors`, {
+  const visorsList = await fetch(`${config.API_URL}/visors`, {
     headers: { 'Content-Type': 'application/json' },
   })
     .then(res => res.json())
