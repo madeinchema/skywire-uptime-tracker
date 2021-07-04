@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "next",
+    "dev:debug": "NODE_OPTIONS='--inspect' next dev",
     "build": "next build",
     "start": "next start",
     "type-check": "tsc"
