@@ -6,7 +6,8 @@
     "dev:debug": "NODE_OPTIONS='--inspect' next dev",
     "build": "next build",
     "start": "next start",
-    "type-check": "tsc"
+    "type-check": "tsc",
+    "server": "php -S localhost:8080 -t 'php'"
   },
   "dependencies": {
     "@chakra-ui/react": "^1.6.0",
