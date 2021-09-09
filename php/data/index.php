@@ -5,6 +5,6 @@ header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Ac
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
 
 $file = '../db/visorsUptimeList.json';
-$current = file_get_contents('http://uptime-tracker.skywire.skycoin.com/uptimes');
+$current = file_get_contents('http://ut.skywire.skycoin.com/uptimes');
 echo file_put_contents($file, $current);
 
